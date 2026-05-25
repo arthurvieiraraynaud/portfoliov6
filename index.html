@@ -1,0 +1,3255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arthur Vieira Raynaud</title>
+<script src="https://player.vimeo.com/api/player.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Syne:wght@400;500;600;700;800&family=Syne+Mono&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #111110;
+  --white: #181816;
+  --black: #e8e4dc;
+  --mid: #6b6b62;
+  --light: #2a2a27;
+  --accent: #c5501a;
+  --font: 'Syne', sans-serif;
+  --mono: 'Syne Mono', monospace;
+  --soul-font: 'Cormorant Garamond', serif; /* Nova fonte humana e cinematográfica */
+  
+  /* Variáveis Dinâmicas de UI para transição de tema */
+  --header-bg: rgba(17, 17, 16, 0.9);
+  --marquee-bg: #0a0a09;
+  --contact-bg: #0a0a09;
+  --card-hover-bg: #222220;
+  --img-placeholder-bg: #1a1a18;
+  --img-label-color: rgba(255, 255, 255, 0.2);
+  
+  /* Filtro de sobreposição escuro para o splash no tema dark */
+  --hero-blend: linear-gradient(rgba(17, 17, 16, 0.72), rgba(17, 17, 16, 0.72));
+}
+
+/* DIRETRIZES DO TEMA CLARO (ESTILO EDITORIAL GALERIA DE ARTE) */
+body.light-theme {
+  --bg: #f5f3ef;            /* Gesso quente de museu / Off-white premium */
+  --white: #ffffff;         /* Superfícies dos cartões e hero em branco puro */
+  --black: #111110;         /* Texto principal em preto carvão profundo */
+  --mid: #7e7c75;           /* Cinza bronzeado elegante */
+  --light: #d8d5ce;         /* Linhas delicadas de plaster */
+  
+  --header-bg: rgba(245, 243, 239, 0.9);
+  --marquee-bg: #e9e6e0;
+  --contact-bg: #e9e6e0;
+  --card-hover-bg: #eae7e0;
+  --img-placeholder-bg: #e2dfd8;
+  --img-label-color: rgba(0, 0, 0, 0.25);
+  
+  /* Filtro de sobreposição claro para o splash no tema claro */
+  --hero-blend: linear-gradient(rgba(245, 243, 239, 0.8), rgba(245, 243, 239, 0.8));
+}
+
+html { scroll-behavior: smooth; scroll-padding-top: 72px; }
+
+/* Transições suaves adicionadas para uma experiência cinemática ao alternar o tema */
+body, header, .section, #work, #about, #experience, #contact, footer, .work-item, .marquee-wrap, .section-label::after, .skill-row, .exp-item, .hero-controls, .header-controls, .profile-pic-container {
+  transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease, border 0.4s ease;
+}
+
+body {
+  background: var(--bg);
+  color: var(--black);
+  font-family: var(--font);
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* NAVEGAÇÃO / HEADER FIXO QUE SURGE NO SCROLL */
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 100;
+  background: var(--header-bg);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--light);
+  transform: translateY(-100%);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.4s ease, border-color 0.4s ease;
+}
+header.scrolled {
+  transform: translateY(0);
+}
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.2rem 2.5rem;
+  position: relative; /* Adicionado para permitir o alinhamento absoluto do menu no centro */
+}
+
+/* Nome no topo esquerdo do cabeçalho fixo */
+.header-logo {
+  font-family: var(--font);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--black);
+  text-decoration: none;
+  z-index: 10; /* Garante que fica por cima do menu centralizado em telas menores */
+}
+.header-nav {
+  display: flex;
+  gap: 1.2rem;
+  list-style: none;
+  position: absolute; /* Alinha o menu no centro absoluto horizontal do cabeçalho */
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* Botões do cabeçalho levemente menores (9.5px) seguindo o padrão principal */
+.header-nav a {
+  font-family: var(--font);
+  font-size: 9.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--mid);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.header-nav a:hover {
+  color: var(--black);
+}
+
+/* HERO */
+.hero {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0 2.5rem;
+  position: relative;
+  overflow: hidden;
+  background: var(--bg);
+  border-bottom: 1px solid var(--light);
+  color: #e8e4dc !important;
+}
+.hero > * {
+  position: relative;
+  z-index: 2;
+}
+.hero-showreel {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 0;
+  transition: opacity 0.8s ease;
+}
+.hero.has-showreel .hero-showreel {
+  opacity: 1;
+}
+.hero.has-showreel::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(17, 17, 16, 0.72);
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Topo fixo com controles nas extremidades */
+.hero-top {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 2rem 2.5rem;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  z-index: 3;
+}
+
+/* Esconde o hero-brand do topo (nome vai para o centro) */
+.hero-brand {
+  display: none;
+}
+
+/* Centro do hero */
+.hero-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 0;
+  width: 100%;
+}
+
+/* Nome centralizado — uma linha */
+.hero-name-center {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2.6rem, 6vw, 7.2rem);
+  font-weight: 600;
+  font-style: italic;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #e8e4dc;
+  line-height: 1.0;
+  margin-bottom: 1.6rem;
+  margin-top: 0;
+  display: block;
+  text-align: center;
+  opacity: 0;
+  animation: heroFadeInUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.38s forwards;
+}
+.hero-name-center .name-slash {
+  color: var(--accent);
+  font-style: italic;
+  font-size: 0.72em;
+  vertical-align: 0.06em;
+}
+body.light-theme .hero .hero-name-center {
+  color: #111110 !important;
+}
+
+
+
+/* Mantém elements internos do Hero com cores originais do splash escuro mesmo no tema claro */
+.hero .hero-name {
+  color: #e8e4dc !important;
+}
+.hero .hero-subtitle {
+  color: rgba(232, 228, 220, 0.95) !important;
+}
+.hero .hero-title-rule {
+  background: rgba(232, 228, 220, 0.38) !important;
+}
+.hero .hero-controls {
+  border-color: rgba(232, 228, 220, 0.25) !important;
+  background: rgba(255, 255, 255, 0.01) !important;
+}
+.hero .control-divider {
+  color: rgba(232, 228, 220, 0.25) !important;
+}
+.hero .lang-btn {
+  color: #8c8c82 !important;
+}
+.hero .lang-btn:hover {
+  color: #ffffff !important;
+}
+.hero .lang-btn.active {
+  color: var(--accent) !important;
+}
+.hero .lang-divider {
+  color: rgba(232, 228, 220, 0.15) !important;
+}
+.hero .theme-btn {
+  color: #8c8c82 !important;
+}
+.hero .theme-btn:hover {
+  color: #ffffff !important;
+}
+.hero .hero-role {
+  color: #e8e4dc !important;
+}
+.hero .hero-role-sep {
+  color: #8c8c82 !important;
+}
+
+.hero-name {
+  font-family: 'Syne', sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--black);
+  line-height: 1;
+}
+.hero-title-rule {
+  width: 112px;
+  height: 1.5px;
+  background: var(--light);
+}
+.hero-subtitle {
+  font-family: var(--font);
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--mid);
+  line-height: 1;
+}
+
+/* CÁPSULA DE CONTROLE UNIFICADA (IDIOMA + TEMA) */
+.hero-controls, .header-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  border: 1px solid var(--light);
+  padding: 0.28rem 0.7rem;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.02);
+}
+body.light-theme .header-controls {
+  background: rgba(0, 0, 0, 0.02);
+}
+.header-controls {
+  z-index: 10; /* Garante que fica por cima do menu centralizado */
+}
+
+.control-divider {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--light);
+  user-select: none;
+}
+
+/* SELETOR DE IDIOMA */
+.lang-switcher {
+  display: flex;
+  gap: 0.2rem;
+  align-items: center;
+}
+.lang-btn {
+  background: none;
+  border: none;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--mid);
+  cursor: pointer;
+  padding: 0.2rem 0.4rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  position: relative;
+  transition: color 0.25s ease;
+}
+
+/* Animação sutil de linha laranja se desenhando no hover */
+.lang-btn::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 1.5px;
+  background-color: var(--accent);
+  transition: width 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.lang-btn:hover::after,
+.lang-btn.active::after {
+  width: 100%;
+}
+.lang-btn.active {
+  color: var(--accent);
+  font-weight: 600;
+}
+.lang-divider {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--light);
+  user-select: none;
+}
+
+/* BOTÃO DE SWITCHER DE TEMA EDITORIAL */
+.theme-btn {
+  background: none;
+  border: none;
+  color: var(--mid);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.4rem;
+  border-radius: 4px;
+  transition: color 0.2s, transform 0.2s;
+  width: 28px;
+  height: 28px;
+}
+.theme-btn:hover {
+  color: var(--black);
+  transform: scale(1.1);
+}
+.theme-icon {
+  width: 16px;
+  height: 16px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Sincronização automática dos ícones de tema */
+body.light-theme .sun-icon {
+  display: none;
+}
+body:not(.light-theme) .moon-icon {
+  display: none;
+}
+
+/* padding-top reduzido para subir os botões e títulos levemente acima do horizonte */
+.hero-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 0;
+  width: 100%;
+}
+
+/* Botões do hero levemente menores (9.5px) com "About Me" */
+.hero-nav {
+  display: flex;
+  gap: 1.2rem;
+  list-style: none;
+  margin-bottom: 3rem;
+  margin-top: 0;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* Role plain — texto simples, sem barras laranja */
+.hero-role-plain {
+  font-family: var(--font);
+  font-size: clamp(0.65rem, 1.2vw, 0.9rem);
+  font-weight: 500;
+  letter-spacing: 0.38em;
+  text-transform: uppercase;
+  color: rgba(232, 228, 220, 0.5);
+}
+body.light-theme .hero .hero-role-plain {
+  color: rgba(17, 17, 16, 0.72) !important;
+}
+
+/* HERO LIGHT THEME FIX */
+body.light-theme .hero {
+  color: #111110 !important;
+}
+
+body.light-theme .hero-nav a {
+  color: #2a2a27 !important;
+  border-color: rgba(17, 17, 16, 0.14) !important;
+  background: rgba(0, 0, 0, 0.02) !important;
+}
+
+body.light-theme .hero-nav a:hover {
+  color: #111110 !important;
+  border-color: var(--accent) !important;
+  background: rgba(197, 80, 26, 0.08) !important;
+}
+
+body.light-theme .hero .theme-btn,
+body.light-theme .hero .lang-btn {
+  color: #4d4d46 !important;
+}
+
+body.light-theme .hero .theme-btn:hover,
+body.light-theme .hero .lang-btn:hover {
+  color: #111110 !important;
+}
+
+body.light-theme .hero .control-divider,
+body.light-theme .hero .lang-divider {
+  color: rgba(17, 17, 16, 0.18) !important;
+}
+
+body.light-theme .hero .hero-controls {
+  border-color: rgba(17, 17, 16, 0.12) !important;
+  background: rgba(255, 255, 255, 0.55) !important;
+  backdrop-filter: blur(14px);
+}
+
+.hero-nav a {
+  font-family: var(--font); /* Syne */
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #c8c8be !important; /* Contraste perfeito sobre o splash */
+  text-decoration: none;
+  padding: 0.5rem 1.4rem;
+  border: 1px solid rgba(232, 228, 220, 0.2) !important;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.02);
+  transition: all 0.25s ease;
+}
+.hero-nav a::after {
+  content: none;
+}
+.hero-nav a:hover {
+  color: #ffffff !important;
+  border-color: var(--accent) !important;
+  background: rgba(197, 80, 26, 0.1) !important;
+}
+
+.hero-roles {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+}
+
+.hero-role {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(1.4rem, 3.2vw, 3rem);
+  font-weight: 300;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--black);
+  line-height: 1.2;
+}
+
+.hero-role .slash {
+  font-family: 'Syne', sans-serif;
+  font-weight: 300;
+  color: var(--accent);
+  letter-spacing: 0.35em;
+  margin: 0;
+  font-style: normal;
+}
+
+/* O símbolo "&" herda o estilo itálico-laranja de destaque */
+.hero-role-sep {
+  font-family: var(--font);
+  font-size: clamp(1.1rem, 2.2vw, 1.85rem);
+  font-weight: 500;
+  color: var(--accent);
+  font-style: italic;
+  margin: 0.6rem 0;
+}
+.hero-role-sep em {
+  font-style: italic;
+  font-weight: 500;
+  color: var(--accent);
+}
+
+/* MARQUEE ESTILIZADA E COM LOOP INFINITO ROBUSTO */
+.marquee-wrap {
+  overflow: hidden;
+  border-top: 1px solid var(--light);
+  border-bottom: 1px solid var(--light);
+  background: var(--marquee-bg);
+  padding: 1.2rem 0;
+  display: flex;
+  width: 100%;
+}
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee-scroll 50s linear infinite;
+}
+.marquee-group {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* Marquee agora com fonte principal Syne e espaçamento muito mais editorial */
+.marquee-group span {
+  font-family: var(--font);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--mid);
+  opacity: 0.85;
+  padding: 0;
+  margin: 0 1.8rem;
+  display: inline-block;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+
+.star-icon {
+  flex-shrink: 0;
+}
+
+/* Estilo para alinhar os logotipos de software sem textos no marquee */
+.marquee-logo-img {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+  margin: 0 1.8rem;
+  vertical-align: middle;
+  flex-shrink: 0;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+@keyframes marquee-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* ESTRUTURA GERAL DAS SEÇÕES */
+.section {
+  padding: 7rem 2.5rem;
+}
+
+/* Títulos de seções seguem a estética do título principal */
+.section-label {
+  font-family: var(--font);
+  font-size: clamp(1.6rem, 2.5vw, 2.2rem);
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--black);
+  opacity: 1;
+  margin-bottom: 4rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+.section-label em {
+  font-style: italic;
+  font-weight: 400;
+  color: var(--accent);
+}
+.section-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--light);
+}
+
+/* FILTROS DE TRABALHOS */
+.work-filters {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 3.5rem;
+  flex-wrap: wrap;
+}
+.filter-btn {
+  font-family: var(--font); /* Syne */
+  font-size: 9.5px;          
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: 0.5rem 1.4rem;
+  border: 1px solid var(--light);
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.02);
+  color: var(--black);
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+body.light-theme .filter-btn {
+  background: rgba(0, 0, 0, 0.02);
+  color: var(--black);
+  border-color: var(--light);
+}
+.filter-btn:hover {
+  color: var(--accent) !important;
+  border-color: var(--accent) !important;
+  background: rgba(197, 80, 26, 0.1) !important;
+}
+body.light-theme .filter-btn:hover {
+  color: var(--accent) !important;
+  border-color: var(--accent) !important;
+  background: rgba(197, 80, 26, 0.08) !important;
+}
+.filter-btn.active {
+  background: var(--accent) !important;
+  color: #ffffff !important;
+  border-color: var(--accent) !important;
+}
+body.light-theme .filter-btn.active {
+  background: var(--accent) !important;
+  color: #ffffff !important;
+  border-color: var(--accent) !important;
+}
+
+/* GRADE DE TRABALHOS */
+#work { background: var(--bg); }
+
+.work-grid {
+  display: grid;
+  grid-template-columns: 55fr 45fr;
+  grid-template-rows: auto;
+  gap: 1px;
+  background: var(--light);
+  border: 1px solid var(--light);
+}
+
+.work-item {
+  background: var(--white);
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  transition: background-color 0.25s;
+  text-decoration: none;
+  color: inherit;
+  position: relative;
+  overflow: hidden;
+}
+.work-item:hover { background: var(--card-hover-bg); }
+
+.work-item-img {
+  width: 100%;
+  aspect-ratio: 16/10;
+  background: var(--img-placeholder-bg);
+  position: relative;
+  overflow: hidden;
+}
+
+.work-item-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.5s ease;
+}
+.work-item:hover .work-item-img img {
+  transform: scale(1.05);
+}
+
+/* OVERLAY DE VÍDEO INTERATIVO */
+.work-play-overlay {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(17,17,16,0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 2;
+}
+.work-item:hover .work-play-overlay {
+  opacity: 1;
+}
+.play-btn-circle {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(197, 80, 26, 0.82), rgba(197, 80, 26, 0.38));
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  backdrop-filter: blur(16px) saturate(150%);
+  -webkit-backdrop-filter: blur(16px) saturate(150%);
+  box-shadow: 0 10px 32px rgba(197, 80, 26, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.24), inset 0 -1px 1px rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  transform: scale(0.85);
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.25s ease, background 0.25s ease;
+  position: relative;
+  overflow: hidden;
+}
+.play-btn-circle::before {
+  content: '';
+  position: absolute;
+  inset: 1px;
+  border-radius: inherit;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0.04) 42%, rgba(255, 255, 255, 0.12));
+  pointer-events: none;
+}
+.play-btn-circle svg {
+  position: relative;
+  z-index: 1;
+}
+.work-item:hover .play-btn-circle {
+  transform: scale(1);
+  background: linear-gradient(135deg, rgba(212, 98, 42, 0.9), rgba(197, 80, 26, 0.48));
+  box-shadow: 0 12px 34px rgba(197, 80, 26, 0.38), inset 0 1px 1px rgba(255, 255, 255, 0.28), inset 0 -1px 1px rgba(255, 255, 255, 0.1);
+}
+
+.work-item-body {
+  padding: 2.2rem 2rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  flex: 1;
+}
+
+.work-item-title {
+  font-size: clamp(1.3rem, 2.5vw, 1.9rem);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: var(--black);
+  transition: color 0.25s;
+}
+.work-item:hover .work-item-title { color: var(--black); }
+
+.work-item-role {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.work-item-footer {
+  padding: 0 2rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid var(--light);
+  margin-top: auto;
+  padding-top: 1.2rem;
+  transition: border-color 0.25s;
+}
+.work-item:hover .work-item-footer { border-color: var(--light); }
+
+.work-tags { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+.work-tag {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--mid);
+  border: 1px solid var(--light);
+  padding: 0.2rem 0.5rem;
+  border-radius: 2px;
+  transition: all 0.25s;
+}
+.work-item:hover .work-tag {
+  color: var(--mid);
+  border-color: var(--light);
+}
+
+.status {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.3rem 0.7rem;
+  border-radius: 2px;
+}
+.status-done { background: rgba(100,180,100,0.1); color: #6ab06a; }
+.status-wip  { background: rgba(197, 80, 26, 0.12); color: var(--accent); }
+
+/* PROJETO EXPANDIDO: ocupa a largura total */
+.work-item.wide {
+  grid-column: 1 / -1;
+  flex-direction: row;
+}
+.work-item.wide .work-item-img {
+  width: 45%;
+  flex-shrink: 0;
+  aspect-ratio: auto;
+  min-height: 280px;
+}
+.work-item.wide .work-item-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.work-item.wide .work-item-body { flex: 1; }
+
+/* PORTFOLIO — Grid uniforme 3 colunas */
+.work-grid {
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.work-item,
+.work-item.wide {
+  display: block;
+  aspect-ratio: 16/10;
+  position: relative;
+  isolation: isolate;
+  grid-column: auto;
+}
+
+.work-item-img,
+.work-item.wide .work-item-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  aspect-ratio: auto;
+}
+.work-item.wide .work-item-content {
+  display: contents;
+}
+.work-play-overlay {
+  display: none;
+}
+.work-item::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: rgba(17, 17, 16, 0.62);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.32s ease;
+}
+.work-item:hover::after,
+.work-item:focus-within::after {
+  opacity: 1;
+}
+.work-item-body,
+.work-item.wide .work-item-body {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(10px);
+  pointer-events: none;
+  transition: opacity 0.32s ease, transform 0.32s ease;
+}
+.work-item:hover .work-item-body,
+.work-item:focus-within .work-item-body {
+  opacity: 1;
+  transform: translateY(0);
+}
+.work-item-title,
+.work-item:hover .work-item-title {
+  color: #ffffff;
+  letter-spacing: 0.02em;
+  max-width: 92%;
+}
+.work-item-role {
+  color: rgba(232, 228, 220, 0.76);
+  max-width: 92%;
+}
+.work-item-footer {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  padding: 1rem;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  border-top: 0;
+  margin-top: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.32s ease;
+}
+.work-item:hover .work-item-footer,
+.work-item:focus-within .work-item-footer {
+  opacity: 1;
+}
+.work-tags {
+  max-width: calc(100% - 5.5rem);
+}
+.work-tag,
+.work-item:hover .work-tag {
+  color: rgba(232, 228, 220, 0.86);
+  border-color: rgba(232, 228, 220, 0.28);
+  background: rgba(255, 255, 255, 0.04);
+}
+.status {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+}
+.status-done {
+  background: rgba(255,255,255,0.08);
+  color: rgba(232, 228, 220, 0.86);
+  border: 1px solid rgba(232, 228, 220, 0.18);
+}
+.status-wip {
+  background: rgba(197, 80, 26, 0.18);
+  color: #f0a071;
+  border: 1px solid rgba(197, 80, 26, 0.32);
+}
+@media (hover: none) {
+  .work-item::after {
+    opacity: 1;
+    background: rgba(17, 17, 16, 0.5);
+  }
+  .work-item-body,
+  .work-item-footer {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* SOBRE (ABOUT) — LAYOUT EDITORIAL ASSIMÉTRICO DE ALTA FIDELIDADE */
+#about { background: var(--white); }
+
+/* Foto deslocada para a direita (grid-template-columns: 1fr 320px;) */
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 5rem;
+  align-items: flex-start;
+}
+
+/* Moldura circular de alto nível com filtro semitom / halftone */
+.profile-pic-container {
+  width: 280px;
+  height: 280px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid var(--accent);
+  background: var(--bg);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+  display: block;
+  position: relative;
+  transition: border-color 0.4s ease, background-color 0.4s ease;
+}
+
+/* Halftone laranja ATRÁS da foto (::before), visível apenas no fundo transparente */
+.profile-pic-container::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle, rgba(197, 80, 26, 0.9) 22%, transparent 27%);
+  background-size: 6px 6px;
+  border-radius: 50%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Remove o overlay por cima */
+.profile-pic-container::after {
+  display: none;
+}
+body.light-theme .profile-pic-container::after {
+  display: none;
+}
+
+.profile-pic {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  position: relative;
+  z-index: 1;
+}
+
+.about-big {
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+  text-transform: uppercase;
+  color: var(--black);
+}
+.about-big em { font-style: italic; font-weight: 400; color: var(--accent); }
+
+.about-right { display: flex; flex-direction: column; gap: 2.5rem; }
+
+/* Parágrafos maiores para leitura mais confortável */
+.about-text {
+  font-size: 16.5px;
+  color: var(--mid);
+  line-height: 1.85;
+}
+.about-text p {
+  margin-bottom: 1.8rem;
+}
+.about-text strong { color: var(--black); font-weight: 600; }
+
+.skill-section { display: flex; flex-direction: column; gap: 1.2rem; }
+.skill-row { display: flex; gap: 0; border-top: 1px solid var(--light); padding-top: 1.2rem; flex-wrap: wrap; align-items: center; }
+
+.skill-cat {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--black);
+  opacity: 0.8;
+  min-width: 140px;
+  flex-shrink: 0;
+}
+.skill-vals {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--black);
+  line-height: 1.7;
+}
+
+/* Estilo unificado para imagens de logotipo de ferramentas */
+.adobe-logo-img {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  vertical-align: middle;
+  border-radius: 4px;
+}
+
+/* EXPERIÊNCIA E EDUCAÇÃO (ESTILO CARD EDITORIAL COM CORES DA MESMA PALETA) */
+#experience { background: var(--bg); }
+.exp-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem; /* Espaço maior entre os cartões */
+}
+.exp-item {
+  display: grid;
+  grid-template-columns: 180px 1fr 140px;
+  gap: 2rem;
+  padding: 2.2rem;
+  border: 1px solid var(--light);
+  border-left-width: 4px;
+  border-radius: 8px;
+  background: var(--white);
+  align-items: start;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* 1. Unloop Filmes - Dynamic Lime Green Accent */
+.exp-item.exp-unloop {
+  border-left-color: #8dc73f;
+  background: rgba(141, 199, 63, 0.02);
+}
+.exp-item.exp-unloop:hover {
+  background: rgba(141, 199, 63, 0.05);
+  border-left-color: #9ad54c;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(141, 199, 63, 0.08);
+}
+body.light-theme .exp-item.exp-unloop {
+  background: rgba(141, 199, 63, 0.015);
+}
+body.light-theme .exp-item.exp-unloop:hover {
+  background: rgba(141, 199, 63, 0.04);
+}
+
+/* 2. PUC-Rio - Deep Ocean Gray-Blue */
+.exp-item.exp-puc {
+  border-left-color: #3b7b99;
+  background: rgba(59, 123, 153, 0.02);
+}
+.exp-item.exp-puc:hover {
+  background: rgba(59, 123, 153, 0.05);
+  border-left-color: #4b8ba9;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(59, 123, 153, 0.08);
+}
+body.light-theme .exp-item.exp-puc {
+  background: rgba(59, 123, 153, 0.015);
+}
+body.light-theme .exp-item.exp-puc:hover {
+  background: rgba(59, 123, 153, 0.04);
+}
+
+/* 3. Freelance - Warm Orange Accent */
+.exp-item.exp-freelance {
+  border-left-color: #c5501a;
+  background: rgba(197, 80, 26, 0.02);
+}
+.exp-item.exp-freelance:hover {
+  background: rgba(197, 80, 26, 0.05);
+  border-left-color: #d4622a;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(197, 80, 26, 0.08);
+}
+body.light-theme .exp-item.exp-freelance {
+  background: rgba(197, 80, 26, 0.015);
+}
+body.light-theme .exp-item.exp-freelance:hover {
+  background: rgba(197, 80, 26, 0.04);
+}
+
+/* Layout da coluna da organização de experiência para alinhar logo sob o texto */
+.exp-org-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center; 
+  justify-content: center; 
+  align-self: center; 
+  gap: 0.8rem;
+  width: 100%;
+}
+
+/* Configurações estéticas da logo unloop na timeline de experiência */
+.unloop-logo {
+  max-width: 130px;
+  height: auto;
+  display: block;
+}
+
+/* Configurações estéticas da logo PUC-Rio na timeline de experiência */
+.puc-logo {
+  max-width: 130px; 
+  height: auto;
+  display: block;
+}
+
+/* Exibir e ocultar logótipos de acordo com o tema selecionado */
+body.light-theme .dark-logo {
+  display: none !important;
+}
+body:not(.light-theme) .light-logo {
+  display: none !important;
+}
+
+/* Cargos para Syne com cores mantidas */
+.exp-title-text {
+  font-family: var(--font); 
+  font-size: clamp(13px, 1.5vw, 17px); 
+  font-weight: 600; 
+  text-transform: uppercase;
+  letter-spacing: 0.08em; 
+  color: var(--accent);
+  margin-bottom: 0.8rem;
+  margin-top: 0.2rem;
+}
+/* Descrição de experiência maior para melhor legibilidade */
+.exp-desc {
+  font-size: 15.5px;
+  color: var(--mid);
+  line-height: 1.8;
+}
+.exp-year {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--mid);
+  text-align: right;
+  padding-top: 0.15rem;
+}
+
+/* Categoria Freelance na timeline de experiência */
+.exp-item.reveal {
+  /* Estilo herdado dos cartões dinâmicos */
+}
+.exp-org-col span {
+  font-family: var(--font);
+  font-size: clamp(1.4rem, 2.2vw, 1.85rem);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  color: var(--black);
+  text-align: center;
+  line-height: 1.1;
+}
+
+/* CONTATO */
+#contact {
+  background-image: linear-gradient(rgba(17, 17, 16, 0.72), rgba(17, 17, 16, 0.72)), url('https://i.postimg.cc/hPWx1LKK/splash-portfolio-sem-cor-2.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  padding: 8rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center; 
+  justify-content: center;
+  text-align: center;      
+  gap: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+/* MODIFICAÇÃO: Tipografia "About Me" Garamond para um toque íntimo de cinema de autor.
+   A frase inteira agora é exibida em branco/off-white (var(--black)) sem itálico/laranja parcial,
+   exceto a palavra final "juntos/together/juntos/ensemble" que fica laranja. */
+.cta-label {
+  font-family: var(--soul-font); /* Cormorant Garamond */
+  font-size: clamp(2rem, 4.5vw, 3.4rem);
+  font-style: italic; /* Belíssimo itálico humanizado de autor */
+  font-weight: 400;
+  text-transform: none; /* Mantém maiúsculas e minúsculas elegantes */
+  letter-spacing: normal;
+  color: var(--black); /* Estilo branco/off-white padrão em todo o texto */
+  margin-bottom: 0.5rem;
+  max-width: 850px;
+  line-height: 1.3;
+}
+#contact .cta-label {
+  color: #e8e4dc;
+}
+.cta-label span.juntos-highlight {
+  color: var(--accent); /* Somente a palavra final em laranja vibrante, mantendo a mesma fonte e estilo */
+}
+
+/* CTA actions centralizados de forma responsiva */
+.cta-actions { 
+  display: flex; 
+  gap: 1.2rem; 
+  flex-wrap: wrap; 
+  justify-content: center; 
+  align-items: center;
+}
+.cta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 1rem 2rem;
+  font-family: var(--font);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-radius: 30px; 
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+}
+.cta-btn.ghost {
+  background: transparent;
+  color: var(--mid);
+  border: 1px solid var(--light);
+}
+.cta-btn.ghost:hover {
+  border-color: var(--mid);
+  color: var(--black);
+}
+.cta-btn.email-btn,
+.cta-btn.linkedin-btn {
+  color: #ffffff !important;
+  border-radius: 30px !important;
+  padding: 1rem 2.5rem;
+  font-family: var(--font);
+  font-size: clamp(11px, 1.4vw, 13.5px);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255, 255, 255, 0.28) !important;
+  backdrop-filter: blur(16px) saturate(150%);
+  -webkit-backdrop-filter: blur(16px) saturate(150%);
+  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.22), inset 0 1px 1px rgba(255, 255, 255, 0.24), inset 0 -1px 1px rgba(255, 255, 255, 0.08);
+  position: relative;
+  overflow: hidden;
+}
+.cta-btn.email-btn::before,
+.cta-btn.linkedin-btn::before {
+  content: '';
+  position: absolute;
+  inset: 1px;
+  border-radius: inherit;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0.04) 42%, rgba(255, 255, 255, 0.12));
+  pointer-events: none;
+}
+.cta-btn.email-btn:hover,
+.cta-btn.linkedin-btn:hover {
+  color: #ffffff !important;
+  transform: translateY(-2px);
+}
+
+/* Novo estilo liquid glass dos botões de contato */
+.cta-btn.email-btn {
+  background: linear-gradient(135deg, rgba(197, 80, 26, 0.82), rgba(197, 80, 26, 0.38)) !important;
+  box-shadow: 0 10px 32px rgba(197, 80, 26, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.24), inset 0 -1px 1px rgba(255, 255, 255, 0.08);
+}
+.cta-btn.email-btn:hover {
+  background: linear-gradient(135deg, rgba(212, 98, 42, 0.9), rgba(197, 80, 26, 0.48)) !important;
+  box-shadow: 0 12px 34px rgba(197, 80, 26, 0.38), inset 0 1px 1px rgba(255, 255, 255, 0.28), inset 0 -1px 1px rgba(255, 255, 255, 0.1);
+}
+.cta-btn.linkedin-btn {
+  background: linear-gradient(135deg, rgba(10, 102, 194, 0.9), rgba(10, 102, 194, 0.42)) !important;
+  border-color: rgba(10, 102, 194, 0.74) !important;
+  box-shadow: 0 10px 32px rgba(10, 102, 194, 0.28), inset 0 1px 1px rgba(255, 255, 255, 0.24), inset 0 -1px 1px rgba(255, 255, 255, 0.08);
+}
+.cta-btn.linkedin-btn:hover {
+  background: linear-gradient(135deg, #0a66c2, rgba(10, 102, 194, 0.56)) !important;
+  border-color: #0a66c2 !important;
+  box-shadow: 0 12px 34px rgba(10, 102, 194, 0.42), inset 0 1px 1px rgba(255, 255, 255, 0.28), inset 0 -1px 1px rgba(255, 255, 255, 0.1);
+}
+
+/* RODAPÉ */
+footer {
+  background: var(--contact-bg);
+  border-top: 1px solid var(--light);
+  padding: 1.5rem 2.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.footer-text {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.25);
+}
+
+/* REVEAL */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.65s ease, transform 0.65s ease;
+}
+.reveal.visible { opacity: 1; transform: none; }
+
+/* Toast Notification Popup Styling */
+.toast-notification {
+  position: fixed;
+  bottom: 2.5rem;
+  left: 50%;
+  transform: translate(-50%, 100px);
+  background: var(--bg);
+  color: var(--black);
+  border: 1px solid var(--accent);
+  padding: 0.8rem 1.6rem;
+  border-radius: 40px;
+  font-family: var(--mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  opacity: 0;
+  visibility: hidden;
+  z-index: 1100;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease, visibility 0.4s;
+  pointer-events: none;
+  white-space: nowrap;
+  font-weight: 600;
+}
+.toast-notification.active {
+  transform: translate(-50%, 0);
+  opacity: 1;
+  visibility: visible;
+}
+
+
+/* ==========================================================================
+   CONTROLES DE VISIBILIDADE MULTILÍNGUE (PROGRESSIVE ENHANCEMENT)
+   ========================================================================= */
+
+/* 1. Estado Padrão: Mostrar Inglês, Ocultar Português, Espanhol e Francês */
+body:not(.lang-pt):not(.lang-es):not(.lang-fr) .lang-pt,
+body:not(.lang-pt):not(.lang-es):not(.lang-fr) .lang-es,
+body:not(.lang-pt):not(.lang-es):not(.lang-fr) .lang-fr {
+  display: none !important;
+}
+
+/* 2. Quando o PT está ativo */
+body.lang-pt .lang-en,
+body.lang-pt .lang-es,
+body.lang-pt .lang-fr {
+  display: none !important;
+}
+
+/* 3. Quando o ES está ativo */
+body.lang-es .lang-en,
+body.lang-es .lang-pt,
+body.lang-es .lang-fr {
+  display: none !important;
+}
+
+/* 4. Quando o FR está ativo */
+body.lang-fr .lang-en,
+body.lang-fr .lang-pt,
+body.lang-fr .lang-es {
+  display: none !important;
+}
+
+
+/* DESIGN RESPONSIVO */
+@media (max-width: 768px) {
+  .header-container { padding: 1rem 1.5rem; }
+  .header-nav { display: none; }
+  .hero { padding-left: 1.5rem; padding-right: 1.5rem; }
+  .section, #contact { padding-left: 1.5rem; padding-right: 1.5rem; }
+  .hero-name { font-size: 15px; letter-spacing: 0.18em; } /* MODIFICAÇÃO: Aumentado levemente no mobile de 14px para 15px */
+  .hero-subtitle { font-size: 11px; letter-spacing: 0.28em; }
+  .work-grid { grid-template-columns: 1fr; }
+  .work-item, .work-item.wide {
+    grid-column: 1 / -1;
+    aspect-ratio: 16/10;
+    min-height: 0;
+  }
+  
+  /* Ajuste fino do About grid em mobile para centralizar a foto */
+  .about-grid { 
+    grid-template-columns: 1fr; 
+    gap: 3rem; 
+    justify-items: center;
+  }
+  .profile-pic-container {
+    margin-bottom: 1.5rem;
+  }
+  
+  .exp-item { grid-template-columns: 1fr; gap: 1rem; padding: 1.5rem; }
+  .exp-year { text-align: left; }
+  footer { flex-direction: column; gap: 0.5rem; text-align: center; }
+}
+
+/* ==========================================================================
+   MODAL / SIMULADOR DE PLAYER DE VÍDEO LIGHTBOX (UPGRADED)
+   ========================================================================== */
+.video-modal {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(11, 11, 10, 0.96);
+  z-index: 1000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 5rem 2rem 2rem;
+}
+.video-modal.active {
+  display: flex;
+}
+.modal-content {
+  width: 100%;
+  max-width: 960px;
+  background: #151514;
+  border: 1px solid var(--light);
+  border-radius: 4px;
+  overflow: visible;
+  position: relative;
+}
+.modal-close {
+  position: absolute;
+  top: 10px;
+  right: -48px;
+  left: auto;
+  transform: none;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(8px) saturate(120%);
+  -webkit-backdrop-filter: blur(8px) saturate(120%);
+  color: rgba(255, 255, 255, 0.85);
+  font-family: var(--mono);
+  font-size: 11px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 20;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  line-height: 1;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.15), inset 0 1px 1px rgba(255, 255, 255, 0.15);
+}
+.modal-close:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.45);
+  color: #ffffff;
+  transform: scale(1.08);
+}
+@media (max-width: 768px) {
+  .video-modal { padding: 1.5rem; }
+  .modal-close {
+    top: 10px;
+    right: 10px;
+  }
+}
+.simulated-player {
+  aspect-ratio: 16/9;
+  background: #000;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+.player-art {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.player-gif-overlay {
+  width: 100%;
+  height: 100%;
+  background: rgba(197, 80, 26, 0.04);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.player-pulse-center {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: rgba(17,17,16,0.8);
+  border: 1px solid var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.08); opacity: 1; }
+  100% { transform: scale(1); opacity: 0.8; }
+}
+.player-controls {
+  z-index: 5;
+  background: linear-gradient(transparent, rgba(0,0,0,0.92));
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+.player-progress-bar {
+  height: 4px;
+  background: var(--light);
+  border-radius: 2px;
+  position: relative;
+  cursor: pointer;
+}
+.player-progress-current {
+  position: absolute;
+  top: 0; left: 0; height: 100%; width: 40%;
+  background: var(--accent);
+  border-radius: 2px;
+  animation: playProgress 12s linear infinite;
+}
+@keyframes playProgress {
+  from { width: 0%; }
+  to { width: 100%; }
+}
+.player-bottom-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.player-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.player-btn-play {
+  background: none;
+  border: none;
+  color: var(--black);
+  font-family: var(--mono);
+  font-size: 10px;
+  cursor: pointer;
+  text-transform: uppercase;
+}
+.player-time {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--mid);
+}
+.modal-project-details {
+  padding: 1.8rem;
+  border-top: 1px solid var(--light);
+}
+.modal-project-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 0.6rem;
+  text-transform: uppercase;
+}
+.modal-project-description {
+  font-size: 15px;
+  color: rgba(232, 228, 220, 0.7);
+  line-height: 1.6;
+}
+
+/* ==========================================================================
+   ANIMATIONS WHEN THE WEBSITE IS OPENED (Cinematic Fade-In)
+   ========================================================================== */
+@keyframes heroFadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes splashScaleDown {
+  from {
+    transform: scale(1.04);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+/* Aplicando animações sequenciais */
+.hero {
+  animation: splashScaleDown 1.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.hero-nav {
+  opacity: 0;
+  animation: heroFadeInUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
+}
+.hero-controls {
+  opacity: 0;
+  animation: heroFadeInUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.35s forwards;
+}
+.hero-roles {
+  opacity: 0;
+  animation: heroFadeInUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.55s forwards;
+}
+</style>
+</head>
+<body class="lang-pt">
+
+<!-- NAVEGAÇÃO / HEADER FIXO (SURGE NO SCROLL) -->
+<header id="header-fixed">
+  <div class="header-container">
+    <a href="#" class="header-logo">Arthur Vieira Raynaud</a>
+    
+    <ul class="header-nav lang-en">
+      <li><a href="#work">My Work</a></li>
+      <li><a href="#about">About Me</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <ul class="header-nav lang-pt">
+      <li><a href="#work">Meu Trabalho</a></li>
+      <li><a href="#about">Sobre Mim</a></li>
+      <li><a href="#experience">Experiência</a></li>
+      <li><a href="#contact">Contato</a></li>
+    </ul>
+    <ul class="header-nav lang-es">
+      <li><a href="#work">Mis Trabajos</a></li>
+      <li><a href="#about">Sobre Mí</a></li>
+      <li><a href="#experience">Experiencia</a></li>
+      <li><a href="#contact">Contacto</a></li>
+    </ul>
+    <ul class="header-nav lang-fr">
+      <li><a href="#work">Mon Travail</a></li>
+      <li><a href="#about">À Propos de Moi</a></li>
+      <li><a href="#experience">Expérience</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+
+    <!-- Doca de Controle Inteligente de Cabeçalho -->
+    <div class="header-controls">
+      <div class="lang-switcher">
+        <button class="lang-btn active" data-lang-target="pt" onclick="setLanguage('pt')">PT</button>
+        <span class="lang-divider">/</span>
+        <button class="lang-btn" data-lang-target="en" onclick="setLanguage('en')">EN</button>
+        <span class="lang-divider">/</span>
+        <button class="lang-btn" data-lang-target="es" onclick="setLanguage('es')">ES</button>
+        <span class="lang-divider">/</span>
+        <button class="lang-btn" data-lang-target="fr" onclick="setLanguage('fr')">FR</button>
+      </div>
+      <span class="control-divider">|</span>
+      <button class="theme-btn" onclick="toggleTheme()" aria-label="Toggle theme">
+        <svg class="theme-icon sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="5"></circle>
+          <line x1="12" y1="1" x2="12" y2="3"></line>
+          <line x1="12" y1="21" x2="12" y2="23"></line>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+          <line x1="1" y1="12" x2="3" y2="12"></line>
+          <line x1="21" y1="12" x2="23" y2="12"></line>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+        <svg class="theme-icon moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<div class="hero">
+  <video class="hero-showreel" autoplay muted loop playsinline aria-hidden="true">
+    <!-- <source src="seu-showreel.mp4" type="video/mp4"> -->
+  </video>
+
+  <!-- Controles no canto superior direito -->
+  <div class="hero-top">
+    <div class="hero-controls">
+      <div class="lang-switcher">
+        <button class="lang-btn active" data-lang-target="pt" onclick="setLanguage('pt')">PT</button>
+        <span class="lang-divider">/</span>
+        <button class="lang-btn" data-lang-target="en" onclick="setLanguage('en')">EN</button>
+        <span class="lang-divider">/</span>
+        <button class="lang-btn" data-lang-target="es" onclick="setLanguage('es')">ES</button>
+        <span class="lang-divider">/</span>
+        <button class="lang-btn" data-lang-target="fr" onclick="setLanguage('fr')">FR</button>
+      </div>
+      <span class="control-divider">|</span>
+      <button class="theme-btn" onclick="toggleTheme()" aria-label="Toggle theme">
+        <svg class="theme-icon sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="5"></circle>
+          <line x1="12" y1="1" x2="12" y2="3"></line>
+          <line x1="12" y1="21" x2="12" y2="23"></line>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+          <line x1="1" y1="12" x2="3" y2="12"></line>
+          <line x1="21" y1="12" x2="23" y2="12"></line>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+        <svg class="theme-icon moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Centro: Nav → Nome → Roles -->
+  <div class="hero-center">
+
+    <!-- Nav ACIMA do nome -->
+    <ul class="hero-nav lang-en">
+      <li><a href="#work">My Work</a></li>
+      <li><a href="#about">About Me</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <ul class="hero-nav lang-pt">
+      <li><a href="#work">Meu Trabalho</a></li>
+      <li><a href="#about">Sobre Mim</a></li>
+      <li><a href="#experience">Experiência</a></li>
+      <li><a href="#contact">Contato</a></li>
+    </ul>
+    <ul class="hero-nav lang-es">
+      <li><a href="#work">Mis Trabajos</a></li>
+      <li><a href="#about">Sobre Mí</a></li>
+      <li><a href="#experience">Experiencia</a></li>
+      <li><a href="#contact">Contacto</a></li>
+    </ul>
+    <ul class="hero-nav lang-fr">
+      <li><a href="#work">Mon Travail</a></li>
+      <li><a href="#about">À Propos</a></li>
+      <li><a href="#experience">Expérience</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+
+    <!-- Nome: Arthur Vieira — uma linha, slash substitui cada "i" -->
+    <h1 class="hero-name-center">Arthur Vieira</h1>
+
+    <!-- Roles: texto normal, sem barras laranja -->
+    <div class="hero-roles lang-en">
+      <span class="hero-role-plain">Video Editor &amp; Filmmaker</span>
+    </div>
+    <div class="hero-roles lang-pt">
+      <span class="hero-role-plain">Editor de Vídeo &amp; Filmmaker</span>
+    </div>
+    <div class="hero-roles lang-es">
+      <span class="hero-role-plain">Editor de Vídeo &amp; Filmmaker</span>
+    </div>
+    <div class="hero-roles lang-fr">
+      <span class="hero-role-plain">Monteur Vidéo &amp; Filmmaker</span>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- MARQUEE -->
+<div class="marquee-wrap" aria-hidden="true">
+  <div class="marquee-track">
+    <!-- Grupo 1 -->
+    <div class="marquee-group">
+      <!-- English items -->
+      <span class="lang-en">Video Editing</span>
+      <svg class="star-icon lang-en" viewBox="0 0 24 24" style="width: 13px; height: 13px; fill: var(--accent); margin: 0 1.5rem; display: inline-block; vertical-align: middle;"><path d="M12 0c0 6.627 5.373 12 12 12-6.627 0-12 5.373-12 12-0-6.627-5.373-12-12-12 6.627 0 12-5.373 12-12z"/></svg>
+      
+      <span class="lang-en">Documentary</span>
+      <svg class="star-icon lang-en" viewBox="0 0 24 24" style="width: 13px; height: 13px; fill: var(--accent); margin: 0 1.5rem; display: inline-block; vertical-align: middle;"><path d="M12 0c0 6.627 5.373 12 12 12-6.627 0-12 5.373-12 12-0-6.627-5.373-12-12-12 6.627 0 12-5.373 12-12z"/></svg>
+      
+      <span class="lang-en">Motion Graphics</span>
+      <svg class="star-icon lang-en" viewBox="0 0 24 24" style="width: 13px; height: 13px; fill: var(--accent); margin: 0 1.5rem; display: inline-block; vertical-align: middle;"><path d="M12 0c0 6.627 5.373 12 12 12-6.627 0-12 5.373-12 12-0-6.627-5.373-12-12-12 6.627 0 12-5.373 12-12z"/></svg>
+      
+      <span class="lang-en">Short Film</span>
+      <svg class="star-icon lang-en" viewBox="0 0 24 24" style="width: 13px; height: 13px; fill: var(--accent); margin: 0 1.5rem; display: inline-block; vertical-align: middle;"><path d="M12 0c0 6.627 5.373 12 12 12-6.627 0-12 5.373-12 12-0-6.627-5.373-12-12-12 6.627 0 12-5.373 12-12z"/></svg>
+      
+      <!-- Premiere Logo CC Icon -->
+      <img src="https://i.postimg.cc/L86hDd3w/Adobe-Premiere-Pro-CC-icon.png" class="marquee-logo-img lang-en" alt="Premiere Pro">
+      <svg class="star-icon lang-en" viewBox="0 0 24 24" style="width: 13px; height: 13px; fill: var(--accent); margin: 0 1.5rem; display: inline-block; vertical-align: middle;"><path d="M12 0c0 6.627 5.373 12 12 12-6.627 0-12 5.373-12 12-0-6.627-5.373-12-12-12 6.627 0 12-5.373 12-12z"/></svg>
+      
+      <!-- After Effects Icon -->
+      <img src="https://i.postimg.cc/ZKLC6Yp3/adobe-after-effects-logo-0.png" class="marquee-logo-img lang-en" alt="After Effects">
+      <svg class="star-icon lang-en" viewBox="0 0 24 24" style="width: 13px; height: 13px; fill: var(--accent); margin: 0 1.5rem; display: inline-block; vertical-align: middle;"><path d="M12 0c0 6.627 5.373 12 12 12-6.627 0-12 5.373-12 12-0-6.627-5.373-12-12-12 6.627 0 12-5.373 12-12z"/></svg>
+      
+      <span class="lang-en">Color Grading</span>
+      <svg class="star-icon lang-en" viewBox="0 0 24 24" style="width: 13px; height: 13px; fill: var(--accent); margin: 0 1.5rem; display: inline-block; vertical-align: middle;"><path d="M12 0c0 6.627 5.373 12 12 12-6.627 0-12 5.373-12 12-0-6.627-5.373-12-12-12 6.627 0 12-5.373 12-12z"/></svg>
+      
+      <span class="lang-en">Post-Production</span>
+      <svg class="star-icon lang-en" viewBox="0 0 24 24" style="width: 13px; height: 13px; fill: var(--accent); margin: 0 1.5rem; display: inline-block; vertical-align: middle;"><path d="M12 0c0 6.627 5.373 12 12 12-6.627 0-12 5.373-12 12-0-6.627-5.373-12-12-12 6.627 0 12-5.373 12-12z"/></svg>
+      
+      <span class="lang-en">Visual Storytelling</span>
+      <svg class="star-icon lang-en" viewBox="0 0 24 24" style="width: 13px; height: 13px; fill: var(--accent); margin: 0 1.5rem; display: inline-block; vertical-align: middle;"><path d="M12 0c0 6.627 5.373 12 12 12-6.627 0-12 5.373-12 12-0-6.627-5.373-12-12-12 6.627 0 12-5.373 12-12z"/></svg>
+
+      <span class="lang-en">SFX</span>
+      <svg class="star-icon lang-en" viewBox="0 0 24 24" style="width: 13px; height: 13px; fill: var(--accent); margin: 0 1.5rem; display: inline-block; vertical-align: middle;"><path d="M12 0c0 6.627 5.373 12 12 12-6.627 0-12 5.373-12 12-0-6.627-5.373-12-12-12 6.627 0 12-5.373 12-12z"/></svg>
+
+      <span class="lang-en">Sound Design</span>
+      <svg class="star-icon lang-en" viewBox="0 0 24 24" style="width: 13px; height: 13px; fill: var(--accent); margin: 0 1.5rem; display: inline-block; vertical-align: middle;"><path d="M12 0c0 6.627 5.373 12 12 12-6.627 0-12 5.373-12 12-0-6.627-5.373-12-12-12 6.627 0 12-5.373 12-12z"/></svg>
+
+      <span class="lang-en">Scriptwriting</span>
+      <svg class="star-icon lang-en" viewBox="0 0 24 24" style="width: 13px; height: 13px; fill: var(--accent); margin: 0 1.5rem; display: inline-block; vertical-align: middle;"><path d="M12 0c0 6.627 5.373 12 12 12-6.627 0-12 5.373-12 12-0-6.627-5.373-12-12-12 6.627 0 12-5.373 12-12z"/></svg>
+
+      <!-- Portuguese items -->
+      <span class="lang-pt">Edição de Vídeo</span>
+      <svg class="star-icon lang-pt" viewBox="0 0 24 24" style="width: 13px; height: 13px; fill: var(--accent); margin: 0 1.5rem; display: inline-block; vertical-align: middle;"><path d="M12 0c0 6.627 5.373 12 12 12-6.627 0-12 5.373-12 12-0-6.627-5.373-12-12-12 6.627 0 12-5.373 12-12z"/></svg>
+      
+      <span class="lang-pt">Documentário</span>
+      <svg class="star-icon lang-pt" viewBox="0 0 24 24" style="width: 13px; height: 13px; fill: var(--accent); margin: 0 1.5rem; display: inline-block; vertical-align: middle;"><path d="M12 0c0 6.627 5.373 12 12 12-6.627 0-12 5.373-12 12-0-6.627-5.373-12-12-12 6.627 0 12-5.373 12-12z"/></svg>
+      
+      <span class="lang-pt">Motion Graphics</span>
+      <svg class="star-icon lang-pt" viewBox="0 0 24 24" style="width: 13px; height: 13px; fill: var(--accent); margin: 0 1.5rem; display: inline-block; vertical-align: middle;"><path d="M12 0c0 6.627 5.373 12 12 12-6.627 0-12 5.373-12 12-0-6.627-5.373-12-12-12 6.627 0 12-5.373 12-12z"/></svg>
+      
+      <span class="lang-pt">Curta-Metragem</span>
+      <svg class="star-icon lang-pt" viewBox="0 0 24 24" style="width: 13px; height: 13px; fill: var(--accent); margin: 0 1.5rem; display: inline-block; vertical-align: middle;"><path d="M12 0c0 6.627 5.373 12 12 12-6.627 0-12 5.373-12 12-0-6.627-5.373-12-12-12 6.627 0 12-5.373 12-12z"/></svg>
+      
+      <!-- Premiere Logo CC Icon -->
+      <img src="https://i.postimg.cc/L86hDd3w/Adobe-Premiere-Pro-CC-icon.png" class="marquee-logo-img lang-pt" alt="Premiere Pro">
+      <svg class="star-icon lang-pt" viewBox="0 0 24 24" style="width: 13px; height: 13px; fill: var(--accent); margin: 0 1.5rem; display: inline-block; vertical-align: middle;"><path d="M12 0c0 6.627 5.373 12 12 12-6.627 0-12 5.373-12 12-0-6.627-5.373-12-12-12 6.627 0 12-5.373 12-12z"/></svg>
+      
+      <!-- After Effects Icon -->
+      <img src="https://i.postimg.cc/ZKLC6Yp3/adobe-after-effects-logo-0.png" class="marquee-logo-img lang-pt" alt="After Effects">
+      <svg class="star-icon lang-pt" viewBox="0 0 24 24" style="width: 13px; height: 13px; fill: var(--accent); margin: 0 1.5rem; display: inline-block; vertical-align: middle;"><path d="M12 0c0 6.627 5.373 12 12 12-6.627 0-12 5.373-12 12-0-6.627-5.373-12-12-12 6.627 0 12-5.373 12-12z"/></svg>
+      
+      <span class="lang-pt">Correção de Cor</span>
+      <svg class="star-icon lang-pt" viewBox="0 0 24 24" style="width: 13px; height: 13px; fill: var(--accent); margin: 0 1.5rem; display: inline-block; vertical-align: middle;"><path d="M12 0c0 6.627 5.373 12 12 12-6.627 0-12 5.373-12 12-0-6.627-5.373-12-12-12 6.627 0 12-5.373 12-12z"/></svg>
+      
+      <span class="lang-pt">Pós-Produção</span>
+      <svg class="star-icon lang-pt" viewBox="0 0 24 24" style="width: 13px; height: 13px; fill: var(--accent); margin: 0 1.5rem; display: inline-block; vertical-align: middle;"><path d="M12 0c0 6.627 5.373 12 12 12-6.627 0-12 5.373-12 12-0-6.627-5.373-12-12-12 6.627 0 12-5.373 12-12z"/></svg>
+      
+      <span class="lang-pt">Narrativa Visual</span>
+      <svg class="star-icon lang-pt" viewBox="0 0 24 24" style="width: 13px; height: 13px; fill: var(--accent); margin: 0 1.5rem; display: inline-block; vertical-align: middle;"><path d="M12 0c0 6.627 5.373 12 12 12-6.627 0-12 5.373-12 12-0-6.627-5.373-12-12-12 6.627 0 12-5.373 12-12z"/></svg>
+
+      <span class="lang-pt">SFX</span>
+      <svg class="star-icon lang-pt" viewBox="0 0 24 24" style="width: 13px; height: 13px; fill: var(--accent); margin: 0 1.5rem; display: inline-block; vertical-align: middle;"><path d="M12 0c0 6.627 5.373 12 12 12-6.627 0-12 5.373-12 12-0-6.627-5.373-12-12-12 6.627 0 12-5.373 12-12z"/></svg>
+
+      <span class="lang-pt">Sound Design</span>
+      <svg class="star-icon lang-pt" viewBox="0 0 24 24" style="width: 13px; height: 13px; fill: var(--accent); margin: 0 1.5rem; display: inline-block; vertical-align: middle;"><path d="M12 0c0 6.627 5.373 12 12 12-6.627 0-12 5.373-12 12-0-6.627-5.373-12-12-12 6.627 0 12-5.373 12-12z"/></svg>
+
+      <span class="lang-pt">Roteiro</span>
+      <svg class="star-icon lang-pt" viewBox="0 0 24 24" style="width: 13px; height: 13px; fill: var(--accent); margin: 0 1.5rem; display: inline-block; vertical-align: middle;"><path d="M12 0c0 6.627 5.373 12 12 12-6.627 0-12 5.373-12 12-0-6.627-5.373-12-12-12 6.627 0 12-5.373 12-12z"/></svg>
+
+      <!-- Spanish items -->
+      <span class="lang-es">Edición de Video</span>
+      <svg class="star-icon lang-es" viewBox="0 0 24 24" style="width: 13px; height: 13px; fill: var(--accent); margin: 0 1.5rem; display: inline-block; vertical-align: middle;"><path d="M12 0c0 6.627 5.373 12 12 12-6.627 0-12 5.373-12 12-0-6.627-5.373-12-12-12 6.627 0 12-5.373 12-12z"/></svg>
+      
+      <span class="lang-es">Documental</span>
+      <svg class="star-icon lang-es" viewBox="0 0 24 24" style="width: 13px; height: 13px; fill: var(--accent); margin: 0 1.5rem; display: inline-block; vertical-align: middle;"><path d="M12 0c0 6.627 5.373 12 12 12-6.627 0-12 5.373-12 12-0-6.627-5.373-12-12-12 6.627 0 12-5.373 12-12z"/></svg>
+      
+      <span class="lang-es">Motion Graphics</span>
+      <svg class="star-icon lang-es" viewBox="0 0 24 24" style="width: 13px; height: 13px; fill: var(--accent); margin: 0 1.5rem; display: inline-block; vertical-align: middle;"><path d="M12 0c0 6.627 5.373 12 12 12-6.627 0-12 5.373-12 12-0-6.627-5.373-12-12-12 6.627 0 12-5.373 12-12z"/></svg>
+      
+      <span class="lang-es">Cortometraje</span>
+      <svg class="star-icon lang-es" viewBox="0 0 24 24" style="width: 13px; height: 13px; fill: var(--accent); margin: 0 1.5rem; display: inline-block; vertical-align: middle;"><path d="M12 0c0 6.627 5.373 12 12 12-6.627 0-12 5.373-12 12-0-6.627-5.373-12-12-12 6.627 0 12-5.373 12-12z"/></svg>
+      
+      <img src="https://i.postimg.cc/L86hDd3w/Adobe-Premiere-Pro-CC-icon.png" class="marquee-logo-img lang-es" alt="Premiere Pro">
+      <svg class="star-icon lang-es" viewBox="0 0 24 24" style="width: 13px; height: 13px; fill: var(--accent); margin: 0 1.5rem; display: inline-block; vertical-align: middle;"><path d="M12 0c0 6.627 5.373 12 12 12-6.627 0-12 5.373-12 12-0-6.627-5.373-12-12-12 6.627 0 12-5.373 12-12z"/></svg>
+      
+      <img src="https://i.postimg.cc/ZKLC6Yp3/adobe-after-effects-logo-0.png" class="marquee-logo-img lang-es" alt="After Effects">
+      <svg class="star-icon lang-es" viewBox="0 0 24 24" style="width: 13px; height: 13px; fill: var(--accent); margin: 0 1.5rem; display: inline-block; vertical-align: middle;"><path d="M12 0c0 6.627 5.373 12 12 12-6.627 0-12 5.373-12 12-0-6.627-5.373-12-12-12 6.627 0 12-5.373 12-12z"/></svg>
+      
+      <span class="lang-es">Corrección de Color</span>
+      <svg class="star-icon lang-es" viewBox="0 0 24 24" style="width: 13px; height: 13px; fill: var(--accent); margin: 0 1.5rem; display: inline-block; vertical-align: middle;"><path d="M12 0c0 6.627 5.373 12 12 12-6.627 0-12 5.373-12 12-0-6.627-5.373-12-12-12 6.627 0 12-5.373 12-12z"/></svg>
+      
+      <span class="lang-es">Postproducción</span>
+      <svg class="star-icon lang-es" viewBox="0 0 24 24" style="width: 13px; height: 13px; fill: var(--accent); margin: 0 1.5rem; display: inline-block; vertical-align: middle;"><path d="M12 0c0 6.627 5.373 12 12 12-6.627 0-12 5.373-12 12-0-6.627-5.373-12-12-12 6.627 0 12-5.373 12-12z"/></svg>
+      
+      <span class="lang-es">Narración Visual</span>
+      <svg class="star-icon lang-es" viewBox="0 0 24 24" style="width: 13px; height: 13px; fill: var(--accent); margin: 0 1.5rem; display: inline-block; vertical-align: middle;"><path d="M12 0c0 6.627 5.373 12 12 12-6.627 0-12 5.373-12 12-0-6.627-5.373-12-12-12 6.627 0 12-5.373 12-12z"/></svg>
+
+      <span class="lang-es">SFX</span>
+      <svg class="star-icon lang-es" viewBox="0 0 24 24" style="width: 13px; height: 13px; fill: var(--accent); margin: 0 1.5rem; display: inline-block; vertical-align: middle;"><path d="M12 0c0 6.627 5.373 12 12 12-6.627 0-12 5.373-12 12-0-6.627-5.373-12-12-12 6.627 0 12-5.373 12-12z"/></svg>
+
+      <span class="lang-es">Sound Design</span>
+      <svg class="star-icon lang-es" viewBox="0 0 24 24" style="width: 13px; height: 13px; fill: var(--accent); margin: 0 1.5rem; display: inline-block; vertical-align: middle;"><path d="M12 0c0 6.627 5.373 12 12 12-6.627 0-12 5.373-12 12-0-6.627-5.373-12-12-12 6.627 0 12-5.373 12-12z"/></svg>
+
+      <span class="lang-es">Guión</span>
+      <svg class="star-icon lang-es" viewBox="0 0 24 24" style="width: 13px; height: 13px; fill: var(--accent); margin: 0 1.5rem; display: inline-block; vertical-align: middle;"><path d="M12 0c0 6.627 5.373 12 12 12-6.627 0-12 5.373-12 12-0-6.627-5.373-12-12-12 6.627 0 12-5.373 12-12z"/></svg>
+
+      <!-- French items -->
+      <span class="lang-fr">Montage Vidéo</span>
+      <svg class="star-icon lang-fr" viewBox="0 0 24 24" style="width: 13px; height: 13px; fill: var(--accent); margin: 0 1.5rem; display: inline-block; vertical-align: middle;"><path d="M12 0c0 6.627 5.373 12 12 12-6.627 0-12 5.373-12 12-0-6.627-5.373-12-12-12 6.627 0 12-5.373 12-12z"/></svg>
+      
+      <span class="lang-fr">Documentaire</span>
+      <svg class="star-icon lang-fr" viewBox="0 0 24 24" style="width: 13px; height: 13px; fill: var(--accent); margin: 0 1.5rem; display: inline-block; vertical-align: middle;"><path d="M12 0c0 6.627 5.373 12 12 12-6.627 0-12 5.373-12 12-0-6.627-5.373-12-12-12 6.627 0 12-5.373 12-12z"/></svg>
+      
+      <span class="lang-fr">Motion Graphics</span>
+      <svg class="star-icon lang-fr" viewBox="0 0 24 24" style="width: 13px; height: 13px; fill: var(--accent); margin: 0 1.5rem; display: inline-block; vertical-align: middle;"><path d="M12 0c0 6.627 5.373 12 12 12-6.627 0-12 5.373-12 12-0-6.627-5.373-12-12-12 6.627 0 12-5.373 12-12z"/></svg>
+      
+      <span class="lang-fr">Court-Métrage</span>
+      <svg class="star-icon lang-fr" viewBox="0 0 24 24" style="width: 13px; height: 13px; fill: var(--accent); margin: 0 1.5rem; display: inline-block; vertical-align: middle;"><path d="M12 0c0 6.627 5.373 12 12 12-6.627 0-12 5.373-12 12-0-6.627-5.373-12-12-12 6.627 0 12-5.373 12-12z"/></svg>
+      
+      <img src="https://i.postimg.cc/L86hDd3w/Adobe-Premiere-Pro-CC-icon.png" class="marquee-logo-img lang-fr" alt="Premiere Pro">
+      <svg class="star-icon lang-fr" viewBox="0 0 24 24" style="width: 13px; height: 13px; fill: var(--accent); margin: 0 1.5rem; display: inline-block; vertical-align: middle;"><path d="M12 0c0 6.627 5.373 12 12 12-6.627 0-12 5.373-12 12-0-6.627-5.373-12-12-12 6.627 0 12-5.373 12-12z"/></svg>
+      
+      <img src="https://i.postimg.cc/ZKLC6Yp3/adobe-after-effects-logo-0.png" class="marquee-logo-img lang-fr" alt="After Effects">
+      <svg class="star-icon lang-fr" viewBox="0 0 24 24" style="width: 13px; height: 13px; fill: var(--accent); margin: 0 1.5rem; display: inline-block; vertical-align: middle;"><path d="M12 0c0 6.627 5.373 12 12 12-6.627 0-12 5.373-12 12-0-6.627-5.373-12-12-12 6.627 0 12-5.373 12-12z"/></svg>
+      
+      <span class="lang-fr">Étalonnage</span>
+      <svg class="star-icon lang-fr" viewBox="0 0 24 24" style="width: 13px; height: 13px; fill: var(--accent); margin: 0 1.5rem; display: inline-block; vertical-align: middle;"><path d="M12 0c0 6.627 5.373 12 12 12-6.627 0-12 5.373-12 12-0-6.627-5.373-12-12-12 6.627 0 12-5.373 12-12z"/></svg>
+      
+      <span class="lang-fr">Post-Production</span>
+      <svg class="star-icon lang-fr" viewBox="0 0 24 24" style="width: 13px; height: 13px; fill: var(--accent); margin: 0 1.5rem; display: inline-block; vertical-align: middle;"><path d="M12 0c0 6.627 5.373 12 12 12-6.627 0-12 5.373-12 12-0-6.627-5.373-12-12-12 6.627 0 12-5.373 12-12z"/></svg>
+      
+      <span class="lang-fr">Narration Visuelle</span>
+      <svg class="star-icon lang-fr" viewBox="0 0 24 24" style="width: 13px; height: 13px; fill: var(--accent); margin: 0 1.5rem; display: inline-block; vertical-align: middle;"><path d="M12 0c0 6.627 5.373 12 12 12-6.627 0-12 5.373-12 12-0-6.627-5.373-12-12-12 6.627 0 12-5.373 12-12z"/></svg>
+
+      <span class="lang-fr">SFX</span>
+      <svg class="star-icon lang-fr" viewBox="0 0 24 24" style="width: 13px; height: 13px; fill: var(--accent); margin: 0 1.5rem; display: inline-block; vertical-align: middle;"><path d="M12 0c0 6.627 5.373 12 12 12-6.627 0-12 5.373-12 12-0-6.627-5.373-12-12-12 6.627 0 12-5.373 12-12z"/></svg>
+
+      <span class="lang-fr">Sound Design</span>
+      <svg class="star-icon lang-fr" viewBox="0 0 24 24" style="width: 13px; height: 13px; fill: var(--accent); margin: 0 1.5rem; display: inline-block; vertical-align: middle;"><path d="M12 0c0 6.627 5.373 12 12 12-6.627 0-12 5.373-12 12-0-6.627-5.373-12-12-12 6.627 0 12-5.373 12-12z"/></svg>
+
+      <span class="lang-fr">Scénario</span>
+      <svg class="star-icon lang-fr" viewBox="0 0 24 24" style="width: 13px; height: 13px; fill: var(--accent); margin: 0 1.5rem; display: inline-block; vertical-align: middle;"><path d="M12 0c0 6.627 5.373 12 12 12-6.627 0-12 5.373-12 12-0-6.627-5.373-12-12-12 6.627 0 12-5.373 12-12z"/></svg>
+    </div>
+    <!-- Grupo 2: cópia idêntica para loop perfeito e sem cortes -->
+    <div class="marquee-group" aria-hidden="true">
+      <span class="lang-en">Video Editing</span>
+      <svg class="star-icon lang-en" viewBox="0 0 24 24" style="width: 13px; height: 13px; fill: var(--accent); margin: 0 1.5rem; display: inline-block; vertical-align: middle;"><path d="M12 0c0 6.627 5.373 12 12 12-6.627 0-12 5.373-12 12-0-6.627-5.373-12-12-12 6.627 0 12-5.373 12-12z"/></svg>
+      <span class="lang-en">Documentary</span>
+      <svg class="star-icon lang-en" viewBox="0 0 24 24" style="width: 13px; height: 13px; fill: var(--accent); margin: 0 1.5rem; display: inline-block; vertical-align: middle;"><path d="M12 0c0 6.627 5.373 12 12 12-6.627 0-12 5.373-12 12-0-6.627-5.373-12-12-12 6.627 0 12-5.373 12-12z"/></svg>
+      <span class="lang-en">Motion Graphics</span>
+      <svg class="star-icon lang-en" viewBox="0 0 24 24" style="width: 13px; height: 13px; fill: var(--accent); margin: 0 1.5rem; display: inline-block; vertical-align: middle;"><path d="M12 0c0 6.627 5.373 12 12 12-6.627 0-12 5.373-12 12-0-6.627-5.373-12-12-12 6.627 0 12-5.373 12-12z"/></svg>
+      <span class="lang-en">Short Film</span>
+      <svg class="star-icon lang-en" viewBox="0 0 24 24" style="width: 13px; height: 13px; fill: var(--accent); margin: 0 1.5rem; display: inline-block; vertical-align: middle;"><path d="M12 0c0 6.627 5.373 12 12 12-6.627 0-12 5.373-12 12-0-6.627-5.373-12-12-12 6.627 0 12-5.373 12-12z"/></svg>
+      <img src="https://i.postimg.cc/L86hDd3w/Adobe-Premiere-Pro-CC-icon.png" class="marquee-logo-img lang-en" alt="Premiere Pro">
+      <svg class="star-icon lang-en" viewBox="0 0 24 24" style="width: 13px; height: 13px; fill: var(--accent); margin: 0 1.5rem; display: inline-block; vertical-align: middle;"><path d="M12 0c0 6.627 5.373 12 12 12-6.627 0-12 5.373-12 12-0-6.627-5.373-12-12-12 6.627 0 12-5.373 12-12z"/></svg>
+      <img src="https://i.postimg.cc/ZKLC6Yp3/adobe-after-effects-logo-0.png" class="marquee-logo-img lang-en" alt="After Effects">
+      <svg class="star-icon lang-en" viewBox="0 0 24 24" style="width: 13px; height: 13px; fill: var(--accent); margin: 0 1.5rem; display: inline-block; vertical-align: middle;"><path d="M12 0c0 6.627 5.373 12 12 12-6.627 0-12 5.373-12 12-0-6.627-5.373-12-12-12 6.627 0 12-5.373 12-12z"/></svg>
+      <span class="lang-en">Color Grading</span>
+      <svg class="star-icon lang-en" viewBox="0 0 24 24" style="width: 13px; height: 13px; fill: var(--accent); margin: 0 1.5rem; display: inline-block; vertical-align: middle;"><path d="M12 0c0 6.627 5.373 12 12 12-6.627 0-12 5.373-12 12-0-6.627-5.373-12-12-12 6.627 0 12-5.373 12-12z"/></svg>
+      <span class="lang-en">Post-Production</span>
+      <svg class="star-icon lang-en" viewBox="0 0 24 24" style="width: 13px; height: 13px; fill: var(--accent); margin: 0 1.5rem; display: inline-block; vertical-align: middle;"><path d="M12 0c0 6.627 5.373 12 12 12-6.627 0-12 5.373-12 12-0-6.627-5.373-12-12-12 6.627 0 12-5.373 12-12z"/></svg>
+      <span class="lang-en">Visual Storytelling</span>
+      <svg class="star-icon lang-en" viewBox="0 0 24 24" style="width: 13px; height: 13px; fill: var(--accent); margin: 0 1.5rem; display: inline-block; vertical-align: middle;"><path d="M12 0c0 6.627 5.373 12 12 12-6.627 0-12 5.373-12 12-0-6.627-5.373-12-12-12 6.627 0 12-5.373 12-12z"/></svg>
+      <span class="lang-en">SFX</span>
+      <svg class="star-icon lang-en" viewBox="0 0 24 24" style="width: 13px; height: 13px; fill: var(--accent); margin: 0 1.5rem; display: inline-block; vertical-align: middle;"><path d="M12 0c0 6.627 5.373 12 12 12-6.627 0-12 5.373-12 12-0-6.627-5.373-12-12-12 6.627 0 12-5.373 12-12z"/></svg>
+      <span class="lang-en">Sound Design</span>
+      <svg class="star-icon lang-en" viewBox="0 0 24 24" style="width: 13px; height: 13px; fill: var(--accent); margin: 0 1.5rem; display: inline-block; vertical-align: middle;"><path d="M12 0c0 6.627 5.373 12 12 12-6.627 0-12 5.373-12 12-0-6.627-5.373-12-12-12 6.627 0 12-5.373 12-12z"/></svg>
+      <span class="lang-en">Scriptwriting</span>
+      <svg class="star-icon lang-en" viewBox="0 0 24 24" style="width: 13px; height: 13px; fill: var(--accent); margin: 0 1.5rem; display: inline-block; vertical-align: middle;"><path d="M12 0c0 6.627 5.373 12 12 12-6.627 0-12 5.373-12 12-0-6.627-5.373-12-12-12 6.627 0 12-5.373 12-12z"/></svg>
+      <span class="lang-pt">Edição de Vídeo</span>
+      <svg class="star-icon lang-pt" viewBox="0 0 24 24" style="width: 13px; height: 13px; fill: var(--accent); margin: 0 1.5rem; display: inline-block; vertical-align: middle;"><path d="M12 0c0 6.627 5.373 12 12 12-6.627 0-12 5.373-12 12-0-6.627-5.373-12-12-12 6.627 0 12-5.373 12-12z"/></svg>
+      <span class="lang-pt">Documentário</span>
+      <svg class="star-icon lang-pt" viewBox="0 0 24 24" style="width: 13px; height: 13px; fill: var(--accent); margin: 0 1.5rem; display: inline-block; vertical-align: middle;"><path d="M12 0c0 6.627 5.373 12 12 12-6.627 0-12 5.373-12 12-0-6.627-5.373-12-12-12 6.627 0 12-5.373 12-12z"/></svg>
+      <span class="lang-pt">Motion Graphics</span>
+      <svg class="star-icon lang-pt" viewBox="0 0 24 24" style="width: 13px; height: 13px; fill: var(--accent); margin: 0 1.5rem; display: inline-block; vertical-align: middle;"><path d="M12 0c0 6.627 5.373 12 12 12-6.627 0-12 5.373-12 12-0-6.627-5.373-12-12-12 6.627 0 12-5.373 12-12z"/></svg>
+      <span class="lang-pt">Curta-Metragem</span>
+      <svg class="star-icon lang-pt" viewBox="0 0 24 24" style="width: 13px; height: 13px; fill: var(--accent); margin: 0 1.5rem; display: inline-block; vertical-align: middle;"><path d="M12 0c0 6.627 5.373 12 12 12-6.627 0-12 5.373-12 12-0-6.627-5.373-12-12-12 6.627 0 12-5.373 12-12z"/></svg>
+      <img src="https://i.postimg.cc/L86hDd3w/Adobe-Premiere-Pro-CC-icon.png" class="marquee-logo-img lang-pt" alt="Premiere Pro">
+      <svg class="star-icon lang-pt" viewBox="0 0 24 24" style="width: 13px; height: 13px; fill: var(--accent); margin: 0 1.5rem; display: inline-block; vertical-align: middle;"><path d="M12 0c0 6.627 5.373 12 12 12-6.627 0-12 5.373-12 12-0-6.627-5.373-12-12-12 6.627 0 12-5.373 12-12z"/></svg>
+      <img src="https://i.postimg.cc/ZKLC6Yp3/adobe-after-effects-logo-0.png" class="marquee-logo-img lang-pt" alt="After Effects">
+      <svg class="star-icon lang-pt" viewBox="0 0 24 24" style="width: 13px; height: 13px; fill: var(--accent); margin: 0 1.5rem; display: inline-block; vertical-align: middle;"><path d="M12 0c0 6.627 5.373 12 12 12-6.627 0-12 5.373-12 12-0-6.627-5.373-12-12-12 6.627 0 12-5.373 12-12z"/></svg>
+      <span class="lang-pt">Correção de Cor</span>
+      <svg class="star-icon lang-pt" viewBox="0 0 24 24" style="width: 13px; height: 13px; fill: var(--accent); margin: 0 1.5rem; display: inline-block; vertical-align: middle;"><path d="M12 0c0 6.627 5.373 12 12 12-6.627 0-12 5.373-12 12-0-6.627-5.373-12-12-12 6.627 0 12-5.373 12-12z"/></svg>
+      <span class="lang-pt">Pós-Produção</span>
+      <svg class="star-icon lang-pt" viewBox="0 0 24 24" style="width: 13px; height: 13px; fill: var(--accent); margin: 0 1.5rem; display: inline-block; vertical-align: middle;"><path d="M12 0c0 6.627 5.373 12 12 12-6.627 0-12 5.373-12 12-0-6.627-5.373-12-12-12 6.627 0 12-5.373 12-12z"/></svg>
+      <span class="lang-pt">Narrativa Visual</span>
+      <svg class="star-icon lang-pt" viewBox="0 0 24 24" style="width: 13px; height: 13px; fill: var(--accent); margin: 0 1.5rem; display: inline-block; vertical-align: middle;"><path d="M12 0c0 6.627 5.373 12 12 12-6.627 0-12 5.373-12 12-0-6.627-5.373-12-12-12 6.627 0 12-5.373 12-12z"/></svg>
+      <span class="lang-pt">SFX</span>
+      <svg class="star-icon lang-pt" viewBox="0 0 24 24" style="width: 13px; height: 13px; fill: var(--accent); margin: 0 1.5rem; display: inline-block; vertical-align: middle;"><path d="M12 0c0 6.627 5.373 12 12 12-6.627 0-12 5.373-12 12-0-6.627-5.373-12-12-12 6.627 0 12-5.373 12-12z"/></svg>
+      <span class="lang-pt">Sound Design</span>
+      <svg class="star-icon lang-pt" viewBox="0 0 24 24" style="width: 13px; height: 13px; fill: var(--accent); margin: 0 1.5rem; display: inline-block; vertical-align: middle;"><path d="M12 0c0 6.627 5.373 12 12 12-6.627 0-12 5.373-12 12-0-6.627-5.373-12-12-12 6.627 0 12-5.373 12-12z"/></svg>
+      <span class="lang-pt">Roteiro</span>
+      <svg class="star-icon lang-pt" viewBox="0 0 24 24" style="width: 13px; height: 13px; fill: var(--accent); margin: 0 1.5rem; display: inline-block; vertical-align: middle;"><path d="M12 0c0 6.627 5.373 12 12 12-6.627 0-12 5.373-12 12-0-6.627-5.373-12-12-12 6.627 0 12-5.373 12-12z"/></svg>
+    </div>
+  </div>
+</div>
+
+<!-- TRABALHO SELECIONADO -->
+<section id="work" class="section">
+  <!-- My/Meus em itálico laranja, Projects/Projetos em branco normal -->
+  <p class="section-label text-label">
+    <span class="lang-en"><em>My</em> Projects</span>
+    <span class="lang-pt"><em>Meus</em> Projetos</span>
+    <span class="lang-es"><em>Mis</em> Proyectos</span>
+    <span class="lang-fr"><em>Mes</em> Projets</span>
+  </p>
+
+  <!-- FILTROS DE PROJETOS -->
+  <div class="work-filters">
+    <button class="filter-btn active" onclick="filterProjects('all')">
+      <span class="lang-en">All</span>
+      <span class="lang-pt">Todos</span>
+      <span class="lang-es">Todos</span>
+      <span class="lang-fr">Tous</span>
+    </button>
+    <button class="filter-btn" onclick="filterProjects('film')">
+      <span class="lang-en">Short Film</span>
+      <span class="lang-pt">Curta-Metragem</span>
+      <span class="lang-es">Cortometraje</span>
+      <span class="lang-fr">Court-Métrage</span>
+    </button>
+    <button class="filter-btn" onclick="filterProjects('doc')">
+      <span class="lang-en">Documentary</span>
+      <span class="lang-pt">Documentário</span>
+      <span class="lang-es">Documental</span>
+      <span class="lang-fr">Documentaire</span>
+    </button>
+    <button class="filter-btn" onclick="filterProjects('branded')">
+      <span class="lang-en">Branded Content</span>
+      <span class="lang-pt">Conteúdo de Marca</span>
+      <span class="lang-es">Contenido de Marca</span>
+      <span class="lang-fr">Contenu de Marque</span>
+    </button>
+    <button class="filter-btn" onclick="filterProjects('institutional')">
+      <span class="lang-en">Institutional</span>
+      <span class="lang-pt">Institucional</span>
+      <span class="lang-es">Institucional</span>
+      <span class="lang-fr">Institutionnel</span>
+    </button>
+    <button class="filter-btn" onclick="filterProjects('university')">
+      <span class="lang-en">University</span>
+      <span class="lang-pt">Universitário</span>
+      <span class="lang-es">Universitario</span>
+      <span class="lang-fr">Universitaire</span>
+    </button>
+    <button class="filter-btn" onclick="filterProjects('sports')">
+      <span class="lang-en">Sports</span>
+      <span class="lang-pt">Esportes</span>
+      <span class="lang-es">Deportes</span>
+      <span class="lang-fr">Sports</span>
+    </button>
+  </div>
+
+  <div class="work-grid">
+
+    <!-- Project 1: O Algoritmo Red Pill (wide, data-category doc university) -->
+    <div class="work-item wide reveal" data-category="doc university" onclick="openVideoPlayer('p2')">
+      <div class="work-item-img doc">
+        <img src="https://images.unsplash.com/photo-1536440136628-849c177e76a1?q=80&w=1200&auto=format&fit=crop" alt="O Algoritmo Red Pill">
+        <div class="work-play-overlay">
+          <div class="play-btn-circle">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3" fill="currentColor"/></svg>
+          </div>
+        </div>
+      </div>
+      <div class="work-item-content">
+        <div class="work-item-body">
+          <h2 class="work-item-title">
+            <span class="lang-en">The Red Pill Algorithm</span>
+            <span class="lang-pt">O Algoritmo Red Pill</span>
+            <span class="lang-es">El Algoritmo Red Pill</span>
+            <span class="lang-fr">L'Algorithme Red Pill</span>
+          </h2>
+          
+          <p class="work-item-role lang-en">Director / Screenwriter / Editor / Researcher</p>
+          <p class="work-item-role lang-pt">Diretor / Roteirista / Editor / Pesquisador</p>
+          <p class="work-item-role lang-es">Director / Guionista / Editor / Investigador</p>
+          <p class="work-item-role lang-fr">Réalisateur / Scénariste / Monteur / Chercheur</p>
+        </div>
+        <div class="work-item-footer">
+          <div class="work-tags lang-en">
+            <span class="work-tag">Documentary</span>
+            <span class="work-tag">Social Impact</span>
+            <span class="work-tag">University</span>
+          </div>
+          <div class="work-tags lang-pt">
+            <span class="work-tag">Documentário</span>
+            <span class="work-tag">Impacto Social</span>
+            <span class="work-tag">Universitário</span>
+          </div>
+          <div class="work-tags lang-es">
+            <span class="work-tag">Documental</span>
+            <span class="work-tag">Impacto Social</span>
+            <span class="work-tag">Universitario</span>
+          </div>
+          <div class="work-tags lang-fr">
+            <span class="work-tag">Documentaire</span>
+            <span class="work-tag">Impact Social</span>
+            <span class="work-tag">Universitaire</span>
+          </div>
+
+          <!-- Apenas o ano (2026) nos badges -->
+          <span class="status status-done lang-en">2026</span>
+          <span class="status status-done lang-pt">2026</span>
+          <span class="status status-done lang-es">2026</span>
+          <span class="status status-done lang-fr">2026</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Project 2: Sand on the Street (film university) -->
+    <div class="work-item reveal" data-category="film university" onclick="openVideoPlayer('p1')">
+      <div class="work-item-img film">
+        <img src="https://i.postimg.cc/0yYYhqgg/Areia-no-asfalto-frame-at-1m3s.jpg" alt="Areia no Asfalto">
+        <div class="work-play-overlay">
+          <div class="play-btn-circle">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3" fill="currentColor"/></svg>
+          </div>
+        </div>
+      </div>
+      <div class="work-item-body">
+        <h2 class="work-item-title">
+          <span class="lang-en">Sand on the Street</span>
+          <span class="lang-pt">Areia no Asfalto</span>
+          <span class="lang-es">Arena en el Asfalto</span>
+          <span class="lang-fr">Du Sable sur l'Asphalte</span>
+        </h2>
+        
+        <p class="work-item-role lang-en">Creator / Screenwriter / Filmmaker</p>
+        <p class="work-item-role lang-pt">Criador / Roteirista / Filmmaker</p>
+        <p class="work-item-role lang-es">Creador / Guionista / Filmmaker</p>
+        <p class="work-item-role lang-fr">Créateur / Scénariste / Filmmaker</p>
+      </div>
+      <div class="work-item-footer">
+        <!-- EN tags -->
+        <div class="work-tags lang-en">
+          <span class="work-tag">Short Film</span>
+          <span class="work-tag">Rio de Janeiro</span>
+          <span class="work-tag">University</span>
+        </div>
+        <!-- PT tags -->
+        <div class="work-tags lang-pt">
+          <span class="work-tag">Curta-Metragem</span>
+          <span class="work-tag">Rio de Janeiro</span>
+          <span class="work-tag">Universitário</span>
+        </div>
+        <!-- ES tags -->
+        <div class="work-tags lang-es">
+          <span class="work-tag">Cortometraje</span>
+          <span class="work-tag">Río de Janeiro</span>
+          <span class="work-tag">Universitario</span>
+        </div>
+        <!-- FR tags -->
+        <div class="work-tags lang-fr">
+          <span class="work-tag">Court-Métrage</span>
+          <span class="work-tag">Rio de Janeiro</span>
+          <span class="work-tag">Universitaire</span>
+        </div>
+
+        <!-- Apenas o ano nos badges -->
+        <span class="status status-done lang-en">2026</span>
+        <span class="status status-done lang-pt">2026</span>
+        <span class="status status-done lang-es">2026</span>
+        <span class="status status-done lang-fr">2026</span>
+      </div>
+    </div>
+
+    <!-- Project 3: SP Open (branded university sports) -->
+    <div class="work-item reveal" data-category="branded university sports" onclick="openVideoPlayer('p4')">
+      <div class="work-item-img brand">
+        <img src="https://i.postimg.cc/T1tS5F2Z/Captura-de-tela-2026-05-23-041429.png" alt="SP Open: Commercial Video">
+        <div class="work-play-overlay">
+          <div class="play-btn-circle">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3" fill="currentColor"/></svg>
+          </div>
+        </div>
+      </div>
+      <div class="work-item-body">
+        <h2 class="work-item-title">SP Open: Commercial Video</h2>
+        
+        <p class="work-item-role lang-en">Video Editor / Screenwriter / Motion Graphics</p>
+        <p class="work-item-role lang-pt">Editor / Roteirista / Motion Graphics</p>
+        <p class="work-item-role lang-es">Editor / Guionista / Motion Graphics</p>
+        <p class="work-item-role lang-fr">Monteur / Scénariste / Motion Graphics</p>
+      </div>
+      <div class="work-item-footer">
+        <div class="work-tags lang-en">
+          <span class="work-tag">Branded Content</span>
+          <span class="work-tag">Sports</span>
+          <span class="work-tag">University</span>
+          <span class="work-tag">Post-Production</span>
+        </div>
+        <div class="work-tags lang-pt">
+          <span class="work-tag">Conteúdo de Marca</span>
+          <span class="work-tag">Esportes</span>
+          <span class="work-tag">Universitário</span>
+          <span class="work-tag">Pós-Produção</span>
+        </div>
+        <div class="work-tags lang-es">
+          <span class="work-tag">Contenido de Marca</span>
+          <span class="work-tag">Deportes</span>
+          <span class="work-tag">Universitario</span>
+          <span class="work-tag">Postproducción</span>
+        </div>
+        <div class="work-tags lang-fr">
+          <span class="work-tag">Contenu de Marque</span>
+          <span class="work-tag">Sports</span>
+          <span class="work-tag">Universitaire</span>
+          <span class="work-tag">Post-Production</span>
+        </div>
+
+        <!-- Apenas o ano nos badges (2025) -->
+        <span class="status status-done lang-en">2025</span>
+        <span class="status status-done lang-pt">2025</span>
+        <span class="status status-done lang-es">2025</span>
+        <span class="status status-done lang-fr">2025</span>
+      </div>
+    </div>
+
+    <!-- Project 4: Institutional - Águas do Rio: Complexo da Maré -->
+    <div class="work-item reveal" data-category="institutional" onclick="openVideoPlayer('p5')">
+      <div class="work-item-img brand">
+        <!-- MODIFICAÇÃO: Imagem de capa do complexo da maré substituída por capa-mareeee.jpg -->
+        <img src="https://i.postimg.cc/yxyhMNyQ/capa-mareeee.jpg" alt="Complexo da Maré">
+        <div class="work-play-overlay">
+          <div class="play-btn-circle">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3" fill="currentColor"/></svg>
+          </div>
+        </div>
+      </div>
+      <div class="work-item-body">
+        <h2 class="work-item-title">Águas do Rio: Complexo da Maré</h2>
+        
+        <p class="work-item-role lang-en">Video Editor / Post-Production</p>
+        <p class="work-item-role lang-pt">Editor / Pós-Produção</p>
+        <p class="work-item-role lang-es">Editor / Postproducción</p>
+        <p class="work-item-role lang-fr">Monteur / Post-Production</p>
+      </div>
+      <div class="work-item-footer">
+        <!-- EN tags -->
+        <div class="work-tags lang-en">
+          <span class="work-tag">Institutional</span>
+          <span class="work-tag">Social Impact</span>
+          <span class="work-tag">Rio de Janeiro</span>
+        </div>
+        <!-- PT tags -->
+        <div class="work-tags lang-pt">
+          <span class="work-tag">Institucional</span>
+          <span class="work-tag">Impacto Social</span>
+          <span class="work-tag">Rio de Janeiro</span>
+        </div>
+        <!-- ES tags -->
+        <div class="work-tags lang-es">
+          <span class="work-tag">Institucional</span>
+          <span class="work-tag">Impacto Social</span>
+          <span class="work-tag">Río de Janeiro</span>
+        </div>
+        <!-- FR tags -->
+        <div class="work-tags lang-fr">
+          <span class="work-tag">Institutionnel</span>
+          <span class="work-tag">Impact Social</span>
+          <span class="work-tag">Rio de Janeiro</span>
+        </div>
+
+        <!-- Apenas o ano nos badges (2025) -->
+        <span class="status status-done lang-en">2025</span>
+        <span class="status status-done lang-pt">2025</span>
+        <span class="status status-done lang-es">2025</span>
+        <span class="status status-done lang-fr">2025</span>
+      </div>
+    </div>
+
+    <!-- Project 5: La Roche-Posay Videocast -->
+    <div class="work-item reveal" data-category="branded" onclick="openVideoPlayer('p3')">
+      <div class="work-item-img brand-laroche">
+        <img src="https://i.postimg.cc/vH121rXZ/KIA-FINAL-00-06-02-16-Still007.jpg" alt="Videocast La Roche-Posay com Preta Gil">
+        <div class="work-play-overlay">
+          <div class="play-btn-circle">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3" fill="currentColor"/></svg>
+          </div>
+        </div>
+      </div>
+      <div class="work-item-body">
+        <h2 class="work-item-title">la-roche-posay: videocast com Preta Gil e Mariana Xavier</h2>
+        
+        <p class="work-item-role lang-en">Video Editor / Post-Production</p>
+        <p class="work-item-role lang-pt">Editor / Pós-Produção</p>
+        <p class="work-item-role lang-es">Editor / Postproducción</p>
+        <p class="work-item-role lang-fr">Monteur / Post-Production</p>
+      </div>
+      <div class="work-item-footer">
+        <!-- EN tags -->
+        <div class="work-tags lang-en">
+          <span class="work-tag">Videocast</span>
+          <span class="work-tag">Branded Content</span>
+        </div>
+        <!-- PT tags -->
+        <div class="work-tags lang-pt">
+          <span class="work-tag">Videocast</span>
+          <span class="work-tag">Conteúdo de Marca</span>
+        </div>
+        <!-- ES tags -->
+        <div class="work-tags lang-es">
+          <span class="work-tag">Videocast</span>
+          <span class="work-tag">Contenido de Marca</span>
+        </div>
+        <!-- FR tags -->
+        <div class="work-tags lang-fr">
+          <span class="work-tag">Vidéocast</span>
+          <span class="work-tag">Contenu de Marque</span>
+        </div>
+
+        <!-- Apenas o ano nos badges (2024) -->
+        <span class="status status-done lang-en">2024</span>
+        <span class="status status-done lang-pt">2024</span>
+        <span class="status status-done lang-es">2024</span>
+        <span class="status status-done lang-fr">2024</span>
+      </div>
+    </div>
+
+    <!-- Project 6: Tanzania: Kilimanjaro International Airport -->
+    <div class="work-item reveal" data-category="institutional" onclick="openVideoPlayer('p6')">
+      <div class="work-item-img brand">
+        <img src="https://i.postimg.cc/mDDg373C/capa-kia.jpg" alt="Kilimanjaro International Airport">
+        <div class="work-play-overlay">
+          <div class="play-btn-circle">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3" fill="currentColor"/></svg>
+          </div>
+        </div>
+      </div>
+      <div class="work-item-body">
+        <h2 class="work-item-title">
+          <span class="lang-en">Tanzania: Kilimanjaro Airport</span>
+          <span class="lang-pt">Tanzânia: Aeroporto de Kilimanjaro</span>
+          <span class="lang-es">Tanzania: Aeropuerto de Kilimanjaro</span>
+          <span class="lang-fr">Tanzanie : Aéroport de Kilimandjaro</span>
+        </h2>
+        
+        <p class="work-item-role lang-en">Video Editor / Post-Production</p>
+        <p class="work-item-role lang-pt">Editor / Pós-Produção</p>
+        <p class="work-item-role lang-es">Editor / Postproducción</p>
+        <p class="work-item-role lang-fr">Monteur / Post-Production</p>
+      </div>
+      <div class="work-item-footer">
+        <!-- EN tags -->
+        <div class="work-tags lang-en">
+          <span class="work-tag">Institutional</span>
+          <span class="work-tag">Tanzania</span>
+        </div>
+        <!-- PT tags -->
+        <div class="work-tags lang-pt">
+          <span class="work-tag">Institucional</span>
+          <span class="work-tag">Tanzânia</span>
+        </div>
+        <!-- ES tags -->
+        <div class="work-tags lang-es">
+          <span class="work-tag">Institucional</span>
+          <span class="work-tag">Tanzania</span>
+        </div>
+        <!-- FR tags -->
+        <div class="work-tags lang-fr">
+          <span class="work-tag">Institutionnel</span>
+          <span class="work-tag">Tanzanie</span>
+        </div>
+
+        <!-- Apenas o ano nos badges (2025) -->
+        <span class="status status-done lang-en">2025</span>
+        <span class="status status-done lang-pt">2025</span>
+        <span class="status status-done lang-es">2025</span>
+        <span class="status status-done lang-fr">2025</span>
+      </div>
+    </div>
+
+    <!-- Project 7: O Peso do véu (film university) -->
+    <div class="work-item reveal" data-category="film university" onclick="openVideoPlayer('p7')">
+      <div class="work-item-img film">
+        <img src="https://i.postimg.cc/BnKDHfZW/capa-o-peso-do-veu.jpg" alt="O Peso do Véu">
+        <div class="work-play-overlay">
+          <div class="play-btn-circle">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3" fill="#fff"/></svg>
+          </div>
+        </div>
+      </div>
+      <div class="work-item-body">
+        <h2 class="work-item-title">
+          <span class="lang-en">The Weight of the Veil</span>
+          <span class="lang-pt">O Peso do Véu</span>
+          <span class="lang-es">El Peso del Velo</span>
+          <span class="lang-fr">Le Poids du Voile</span>
+        </h2>
+        
+        <p class="work-item-role lang-en">Editor / Post-Production</p>
+        <p class="work-item-role lang-pt">Editor / Pós-Produção</p>
+        <p class="work-item-role lang-es">Editor / Postproducción</p>
+        <p class="work-item-role lang-fr">Monteur / Post-Production</p>
+      </div>
+      <div class="work-item-footer">
+        <!-- EN tags -->
+        <div class="work-tags lang-en">
+          <span class="work-tag">Short Film</span>
+          <span class="work-tag">Experimental</span>
+          <span class="work-tag">University</span>
+        </div>
+        <!-- PT tags -->
+        <div class="work-tags lang-pt">
+          <span class="work-tag">Curta-Metragem</span>
+          <span class="work-tag">Experimental</span>
+          <span class="work-tag">Universitário</span>
+        </div>
+        <!-- ES tags -->
+        <div class="work-tags lang-es">
+          <span class="work-tag">Cortometraje</span>
+          <span class="work-tag">Experimental</span>
+          <span class="work-tag">Universitario</span>
+        </div>
+        <!-- FR tags -->
+        <div class="work-tags lang-fr">
+          <span class="work-tag">Court-Métrage</span>
+          <span class="work-tag">Expérimental</span>
+          <span class="work-tag">Universitaire</span>
+        </div>
+
+        <!-- Apenas o ano nos badges (2025) -->
+        <span class="status status-done lang-en">2025</span>
+        <span class="status status-done lang-pt">2025</span>
+        <span class="status status-done lang-es">2025</span>
+        <span class="status status-done lang-fr">2025</span>
+      </div>
+    </div>
+
+    <!-- Project 8: Placeholder -->
+    <div class="work-item reveal" data-category="all" style="cursor: default;">
+      <div class="work-item-img">
+        <img src="https://images.unsplash.com/photo-1485846234645-a62644f84728?q=80&w=1200&auto=format&fit=crop" alt="Em breve">
+      </div>
+      <div class="work-item-body">
+        <h2 class="work-item-title">
+          <span class="lang-en">Coming Soon</span>
+          <span class="lang-pt">Em Breve</span>
+          <span class="lang-es">Próximamente</span>
+          <span class="lang-fr">Bientôt</span>
+        </h2>
+        <p class="work-item-role lang-en">In Production</p>
+        <p class="work-item-role lang-pt">Em Produção</p>
+        <p class="work-item-role lang-es">En Producción</p>
+        <p class="work-item-role lang-fr">En Production</p>
+      </div>
+      <div class="work-item-footer">
+        <div class="work-tags lang-en"><span class="work-tag">—</span></div>
+        <div class="work-tags lang-pt"><span class="work-tag">—</span></div>
+        <div class="work-tags lang-es"><span class="work-tag">—</span></div>
+        <div class="work-tags lang-fr"><span class="work-tag">—</span></div>
+        <span class="status status-wip lang-en">WIP</span>
+        <span class="status status-wip lang-pt">WIP</span>
+        <span class="status status-wip lang-es">WIP</span>
+        <span class="status status-wip lang-fr">WIP</span>
+      </div>
+    </div>
+
+    <!-- Project 9: Placeholder -->
+    <div class="work-item reveal" data-category="all" style="cursor: default;">
+      <div class="work-item-img">
+        <img src="https://images.unsplash.com/photo-1478720568477-152d9b164e26?q=80&w=1200&auto=format&fit=crop" alt="Em breve">
+      </div>
+      <div class="work-item-body">
+        <h2 class="work-item-title">
+          <span class="lang-en">Coming Soon</span>
+          <span class="lang-pt">Em Breve</span>
+          <span class="lang-es">Próximamente</span>
+          <span class="lang-fr">Bientôt</span>
+        </h2>
+        <p class="work-item-role lang-en">In Production</p>
+        <p class="work-item-role lang-pt">Em Produção</p>
+        <p class="work-item-role lang-es">En Producción</p>
+        <p class="work-item-role lang-fr">En Production</p>
+      </div>
+      <div class="work-item-footer">
+        <div class="work-tags lang-en"><span class="work-tag">—</span></div>
+        <div class="work-tags lang-pt"><span class="work-tag">—</span></div>
+        <div class="work-tags lang-es"><span class="work-tag">—</span></div>
+        <div class="work-tags lang-fr"><span class="work-tag">—</span></div>
+        <span class="status status-wip lang-en">WIP</span>
+        <span class="status status-wip lang-pt">WIP</span>
+        <span class="status status-wip lang-es">WIP</span>
+        <span class="status status-wip lang-fr">WIP</span>
+      </div>
+    </div>
+
+  </div> <!-- FIM DA WORK-GRID -->
+</section> <!-- FIM DA SEÇÃO WORK -->
+
+
+<!-- SOBRE (ABOUT) -->
+<section id="about" class="section">
+  <p class="section-label">
+    <span class="lang-en"><em>About</em> Me</span>
+    <span class="lang-pt"><em>Sobre</em> Mim</span>
+    <span class="lang-es"><em>Sobre</em> Mí</span>
+    <span class="lang-fr"><em>À Propos de</em> Moi</span>
+  </p>
+  
+  <div class="about-grid">
+    <!-- Coluna da Esquerda: Biografia e Tabela Detalhada de Metadados/Tabelas de Competências -->
+    <div style="display: flex; flex-direction: column; gap: 3rem;">
+      <div class="about-text reveal">
+        <!-- English -->
+        <div class="lang-en">
+          <p>I'm a filmmaker and video editor based in <strong>Rio de Janeiro</strong>, in my third year at PUC-Rio studying Film and Business: a combination that shapes how I approach storytelling: with aesthetic intention and strategic awareness.</p>
+          <p>My work spans <strong>documentary filmmaking</strong>, short film, and branded content. I'm drawn to where urban culture, digital subcultures, and visual poetry intersect. At <strong>Unloop Filmes</strong>, I work across the full post-production pipeline: editing, motion graphics, archival integration, and asset management.</p>
+        </div>
+        <!-- Português -->
+        <div class="lang-pt">
+          <p>Sou filmmaker e editor de vídeo baseado no <strong>Rio de Janeiro</strong>, no terceiro ano de Cinema e Administração na PUC-Rio: uma combinação que molda minha abordagem de contar histórias: com intenção estética e consciência estratégica.</p>
+          <p>Meu trabalho abrange <strong>documentários</strong>, curtas-metragens e conteúdo de marca. Sinto-me atraído pela interseção entre cultura urbana, subculturas digitais e poesia visual. Na <strong>Unloop Filmes</strong>, trabalho em todo o fluxo de pós-produção: edição, motion graphics, integração de arquivos de arquivo e gestão de ativos.</p>
+        </div>
+        <!-- Spanish -->
+        <div class="lang-es">
+          <p>Soy un filmmaker y editor de video radicado en <strong>Río de Janeiro</strong>, cursando mi tercer año de Cine y Negocios en la PUC-Rio: una combinación que define cómo abordo la narrativa: con intención estética y conciencia estratégica.</p>
+          <p>Mi trabalho abrange el <strong>cine documental</strong>, cortometrajes y contenido de marca. Me interesa la intersección entre la cultura urbana, las subculturas digitales y la poesía visual. En <strong>Unloop Filmes</strong>, trabajo en todo el flujo de postproducción: edición, motion graphics, integración de archivos y gestión de contenidos.</p>
+        </div>
+        <!-- Francês -->
+        <div class="lang-fr">
+          <p>Je suis filmmaker et monteur vidéo basé à <strong>Rio de Janeiro</strong>, en troisième année de Cinéma et Commerce à la PUC-Rio : une combinaison que façonne ma façon d'aborder le récit : avec une intention esthétique et une conscience stratégique.</p>
+          <p>Mon trabalho s'étend du <strong>documentaire</strong>, au court-métrage et au contenu de marque. Je suis attiré par l'intersection entre culture urbaine, sous-cultures digitales et poésie visuelle. Chez <strong>Unloop Filmes</strong>, je travaille sur l'ensemble de l'étape de post-production : montage, motion graphics, intégration d'archives et gestion des actifs.</p>
+        </div>
+      </div>
+
+      <!-- HISTÓRIA / COMPETÊNCIAS METADADOS -->
+      <div class="about-right reveal">
+        <div class="skill-section">
+          <!-- Ferramentas (Tools) atualizada com as imagens oficiais no tamanho correto -->
+          <div class="skill-row">
+            <span class="skill-cat lang-en">Tools</span>
+            <span class="skill-cat lang-pt">Ferramentas</span>
+            <span class="skill-cat lang-es">Herramientas</span>
+            <span class="skill-cat lang-fr">Outils</span>
+            <div class="skill-vals" style="display: inline-flex; align-items: center; gap: 0.8rem; flex-wrap: wrap; vertical-align: middle;">
+              <div style="display: inline-flex; align-items: center; gap: 0.4rem;">
+                <img src="https://i.postimg.cc/L86hDd3w/Adobe-Premiere-Pro-CC-icon.png" class="adobe-logo-img" alt="Premiere Pro">
+                <span style="font-weight: 700; color: var(--black);">Premiere Pro</span>
+              </div>
+              <span style="color: var(--light); opacity: 0.5;">·</span>
+              <div style="display: inline-flex; align-items: center; gap: 0.4rem;">
+                <img src="https://i.postimg.cc/ZKLC6Yp3/adobe-after-effects-logo-0.png" class="adobe-logo-img" alt="After Effects">
+                <span style="font-weight: 700; color: var(--black);">After Effects</span>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Linha de formatos atualizada -->
+          <div class="skill-row">
+            <span class="skill-cat">Formats</span>
+            <span class="skill-vals lang-en">Documentary · Short Film · Branded Content · Institutional Videos · Short Videos</span>
+            <span class="skill-vals lang-pt">Documentário · Curta-Metragem · Conteúdo de Marca · Vídeos Institucionais · Vídeos Curtos</span>
+            <span class="skill-vals lang-es">Documental · Cortometraje · Contenido de Marca · Videos Institucionales · Videos Cortos</span>
+            <span class="skill-vals lang-fr">Documentaire · Court-Métrage · Contenu de Marque · Vidéos Institutionnelles · Vidéos Courtes</span>
+          </div>
+          
+          <!-- Habilidades simplificadas de acordo com as diretivas -->
+          <div class="skill-row">
+            <span class="skill-cat lang-en">Skills</span>
+            <span class="skill-cat lang-pt">Habilidades</span>
+            <span class="skill-cat lang-es">Habilidades</span>
+            <span class="skill-cat lang-fr">Compétences</span>
+            
+            <span class="skill-vals lang-en">Editing · Motion Graphics · Color Grading · Scriptwriting · Translation · Subtitling</span>
+            <span class="skill-vals lang-pt">Edição · Motion Graphics · Correção de Cor · Roteiro · Tradução · Legendagem</span>
+            <span class="skill-vals lang-es">Edición · Motion Graphics · Corrección de Color · Guion · Traducción · Subtitulado</span>
+            <span class="skill-vals lang-fr">Montage · Motion Graphics · Étalonnage · Scénarisation · Traduction · Sous-titrage</span>
+          </div>
+          
+          <!-- Idiomas com Francês (nativo) e Espanhol B1 -->
+          <div class="skill-row">
+            <span class="skill-cat lang-en">Languages</span>
+            <span class="skill-cat lang-pt">Idiomas</span>
+            <span class="skill-cat lang-es">Idiomas</span>
+            <span class="skill-cat lang-fr">Langues</span>
+            
+            <span class="skill-vals lang-en">Portuguese (Native) · French (Native) · English (Fluent) · Spanish (B1)</span>
+            <span class="skill-vals lang-pt">Português (Nativo) · Francês (Nativo) · Inglês (Fluente) · Espanhol (B1)</span>
+            <span class="skill-vals lang-es">Portugués (Nativo) · Francés (Nativo) · Inglés (Fluido) · Español (B1)</span>
+            <span class="skill-vals lang-fr">Portugais (Maternel) · Français (Maternel) · Anglais (Courant) · Espagnol (B1)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Coluna da Direita: Retrato circular ampliado com borda e posicionamento superior equilibrado -->
+    <div style="display: flex; justify-content: center; align-items: flex-start; width: 100%;">
+      <div class="profile-pic-container reveal">
+        <img src="https://i.postimg.cc/rmpbP3W0/foto-perfil-linkedin-branca.png" class="profile-pic dark-logo" alt="Arthur Vieira Raynaud Profile Dark">
+        <img src="https://i.postimg.cc/rmpbP3W0/foto-perfil-linkedin-branca.png" class="profile-pic light-logo" alt="Arthur Vieira Raynaud Profile Light">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIÊNCIA -->
+<section id="experience" class="section">
+  <!-- Sinal "&" agora possui o estilo de destaque/itálico em vez da palavra Education -->
+  <p class="section-label">
+    <span class="lang-en">Experience <em>&</em> Education</span>
+    <span class="lang-pt">Experiência <em>&</em> Educação</span>
+    <span class="lang-es">Experiencia <em>&</em> Educación</span>
+    <span class="lang-fr">Expérience <em>&</em> Éducation</span>
+  </p>
+  <div class="exp-list">
+    <div class="exp-item exp-unloop reveal">
+      <!-- Unloop Filmes logos perfeitamente centralizadas verticalmente e horizontalmente -->
+      <div class="exp-org-col">
+        <img src="https://i.postimg.cc/ht652QY3/Logo-Unloop-white.png" class="unloop-logo dark-logo" alt="Unloop Filmes Logo">
+        <img src="https://i.postimg.cc/ZqPx69zj/Logo-Unloop-black.png" class="unloop-logo light-logo" alt="Unloop Filmes Logo">
+      </div>
+      <div>
+        <h3 class="exp-title-text lang-en">Post-Production Intern</h3>
+        <h3 class="exp-title-text lang-pt">Estagiário de Pós-Produção</h3>
+        <h3 class="exp-title-text lang-es">Pasante de Postproducción</h3>
+        <h3 class="exp-title-text lang-fr">Stagiaire en Post-Production</h3>
+        
+        <p class="exp-desc lang-en">Full post-production pipeline support across documentary, branded, and commercial formats. Technical cinematography support, video editing, archival material integration, and asset management for ongoing production workflows.</p>
+        <p class="exp-desc lang-pt">Suporte completo em todo o fluxo de pós-produção em formatos de documentário, institucional e comercial. Suporte técnico de cinematografia, edição de vídeo, integração de material de arquivo e gestão de ativos para fluxos de produção.</p>
+        <p class="exp-desc lang-es">Soporte completo en todo el flujo de postproducción en formatos de documental, marca y comercial. Soporte técnico de cinematografía, edición de video, integración de material de archivo y gestión de activos para flujos de producción en curso.</p>
+        <p class="exp-desc lang-fr">Soutien complet sur l'ensemble du flux de post-production pour les formats documentaire, de marque et commercial. Soutien technique en cinématographie, montage vidéo, intégration d'archive et gestion des actifs de production.</p>
+      </div>
+      <span class="exp-year lang-en">2025 - Present<br>Rio de Janeiro</span>
+      <span class="exp-year lang-pt">2025 - Presente<br>Rio de Janeiro</span>
+      <span class="exp-year lang-es">2025 - Presente<br>Río de Janeiro</span>
+      <span class="exp-year lang-fr">2025 - Présent<br>Rio de Janeiro</span>
+    </div>
+    
+    <div class="exp-item exp-puc reveal">
+      <!-- PUC-Rio logos, perfeitamente centralizadas verticalmente e redimensionadas para 130px de largura -->
+      <div class="exp-org-col">
+        <img src="https://i.postimg.cc/j219wMG3/logo-puc-branca.png" class="puc-logo dark-logo" alt="PUC-Rio Logo">
+        <img src="https://i.postimg.cc/1trsF1H2/logo-puc.png" class="puc-logo light-logo" alt="PUC-Rio Logo">
+      </div>
+      <div>
+        <!-- Curso/Ano PUC-Rio sutilmente atualizado -->
+        <h3 class="exp-title-text lang-en">Film & Business: Year 3</h3>
+        <h3 class="exp-title-text lang-pt">Cinema & Negócios: 3º Ano</h3>
+        <h3 class="exp-title-text lang-es">Cine & Negocios: 3er Año</h3>
+        <h3 class="exp-title-text lang-fr">Cinéma & Commerce: 3e Année</h3>
+        
+        <p class="exp-desc lang-en">Dual focus in filmmaking and business administration at the Pontifícia Universidade Católica do Rio de Janeiro. A curriculum bridging cinematic storytelling, production design, and strategic thinking.</p>
+        <p class="exp-desc lang-pt">Foco duplo em cinema e administração de empresas na PUC-Rio. Um currículo que une narrativa cinematográfica, direção de arte e pensamento estratégico.</p>
+        <p class="exp-desc lang-es">Enfoque doble en cine y administración de empresas en la Pontifícia Universidade Católica del Río de Janeiro. Un plan de estudios que une la narrativa cinematográfica, el diseño de producción y el pensamiento estratégico.</p>
+        <p class="exp-desc lang-fr">Double spécialisation en réalisation cinématographique et administration des affaires à la Pontifícia Université Católica do Rio de Janeiro. Un programme alliant récit cinématographique, direction artistique et pensée stratégique.</p>
+      </div>
+      <!-- Anos PUC-Rio atualizados para 2024 - Present -->
+      <span class="exp-year lang-en">2024 - Present<br>Rio de Janeiro</span>
+      <span class="exp-year lang-pt">2024 - Presente<br>Rio de Janeiro</span>
+      <span class="exp-year lang-es">2024 - Presente<br>Río de Janeiro</span>
+      <span class="exp-year lang-fr">2024 - Présent<br>Rio de Janeiro</span>
+    </div>
+
+    <!-- Categoria Freelance na timeline de experiência -->
+    <div class="exp-item exp-freelance reveal">
+      <div class="exp-org-col">
+        <span style="font-family: var(--font); font-size: clamp(1.4rem, 2.2vw, 1.85rem); font-weight: 800; text-transform: uppercase; letter-spacing: -0.01em; color: var(--black); text-align: center; line-height: 1.1;">FREE<br><span style="color: var(--accent);">LANCE</span></span>
+      </div>
+      <div>
+        <h3 class="exp-title-text lang-en">Independent Filmmaker & Editor</h3>
+        <h3 class="exp-title-text lang-pt">Filmmaker & Editor Independente</h3>
+        <h3 class="exp-title-text lang-es">Filmmaker & Editor Independiente</h3>
+        <h3 class="exp-title-text lang-fr">Filmmaker & Monteur Indépendant</h3>
+        
+        <p class="exp-desc lang-en">End-to-end post-production, directing, and color grading for music videos, indie shorts, and corporate marketing assets. Partnered directly with diverse clients and creators to produce high-impact visual campaigns.</p>
+        <p class="exp-desc lang-pt">Fluxo completo de pós-produção, direção e colorização para videoclipes, curtas independentes e ativos de marketing corporativo. Parcerias diretas com diversos clientes e criadores para produzir campanhas visuais de alto impacto.</p>
+        <p class="exp-desc lang-es">Flujo completo de postproducción, dirección y corrección de color para videos musicales, cortometrajes independientes y activos de marketing corporativo. Alianzas directas con diversos clientes y creadores para producir campaigns visuales de alto impacto.</p>
+        <p class="exp-desc lang-fr">Flux complet de post-production, réalisation et étalonnage pour clips musicaux, courts-métrages indépendants et supports marketing d'entreprise. Collaboration directe avec divers clients et créateurs para produzir des campagnes visuelles à fort impact.</p>
+      </div>
+      <span class="exp-year lang-en">2021 - Present<br>Rio de Janeiro</span>
+      <span class="exp-year lang-pt">2021 - Presente<br>Rio de Janeiro</span>
+      <span class="exp-year lang-es">2021 - Presente<br>Río de Janeiro</span>
+      <span class="exp-year lang-fr">2021 - Présent<br>Rio de Janeiro</span>
+    </div>
+  </div>
+</section>
+
+<!-- CONTATO -->
+<section id="contact">
+  <!-- Chamada "Entre em contato" e traduções unificadas no estilo 'Cormorant Garamond' com itálicos expressivos e alma -->
+  <h2 class="cta-label lang-pt">
+    <em>Entre em contato</em> comigo e vamos trabalhar <span class="juntos-highlight">juntos!</span>
+  </h2>
+  <h2 class="cta-label lang-en">
+    <em>Get in touch</em> with me and let's work <span class="juntos-highlight">together!</span>
+  </h2>
+  <h2 class="cta-label lang-es">
+    <em>Ponte en contacto</em> conmigo y ¡trabajemos <span class="juntos-highlight">juntos!</span>
+  </h2>
+  <h2 class="cta-label lang-fr">
+    <em>Contactez-moi</em> et travaillons <span class="juntos-highlight">ensemble !</span>
+  </h2>
+  
+  <!-- Botões centralizados de forma responsiva com e-mail exposto na pill laranja -->
+  <div class="cta-actions" style="margin-top: 1rem;">
+    <a class="cta-btn email-btn" onclick="copyEmail(event)">arthur.vieiraraynaud@gmail.com</a>
+    <a class="cta-btn linkedin-btn" href="https://www.linkedin.com/in/arthur-vieira-raynaud/" target="_blank">LinkedIn ↗</a>
+  </div>
+
+  <!-- Botão Voltar ao Topo esteticamente posicionado -->
+  <div style="margin-top: 3.5rem; display: flex; justify-content: center; width: 100%;">
+    <a href="#" class="cta-btn ghost" style="font-size: clamp(8.5px, 1.2vw, 10.5px); padding: 0.6rem 1.6rem; text-decoration: none; border-radius: 30px;">
+      <span class="lang-en">Back to Top ↑</span>
+      <span class="lang-pt">Voltar ao Início ↑</span>
+      <span class="lang-es">Volver al Inicio ↑</span>
+      <span class="lang-fr">Retour en Haut ↑</span>
+    </a>
+  </div>
+</section>
+
+<footer>
+  <span class="footer-text">© 2026 Arthur Vieira Raynaud</span>
+  <span class="footer-text lang-en">Rio de Janeiro, Brazil</span>
+  <span class="footer-text lang-pt">Rio de Janeiro, Brasil</span>
+  <span class="footer-text lang-es">Río de Janeiro, Brasil</span>
+  <span class="footer-text lang-fr">Rio de Janeiro, Brésil</span>
+</footer>
+
+<!-- LIGHTBOX INTERATIVO (PLAYER DE VÍDEO REAL OU SIMULADO) -->
+<div id="videoModal" class="video-modal">
+  <div class="modal-content">
+    <button class="modal-close" onclick="closeVideoPlayer()">✕</button>
+
+    <!-- Player de Vídeo Real (para embeds ativos de YouTube) -->
+    <div id="realVideoPlayer" style="display: none; width: 100%; aspect-ratio: 16/9; background: #000; overflow: hidden;"></div>
+    
+    <!-- Player de Vídeo Simulado (Fallback para projetos offline/mockup) -->
+    <div id="simulatedVideoPlayer" class="simulated-player">
+      <div id="playerArt" class="player-art">
+        <div class="player-gif-overlay">
+          <div class="player-pulse-center">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3" fill="#fff"/></svg>
+          </div>
+        </div>
+      </div>
+      
+      <div class="player-controls">
+        <div class="player-progress-bar">
+          <div class="player-progress-current"></div>
+        </div>
+        <div class="player-bottom-controls">
+          <div class="player-left">
+            <button class="player-btn-play">▶ Play</button>
+            <span class="player-time">0:04 / 2:30</span>
+          </div>
+          <span style="font-family:var(--mono); font-size:10px; color:var(--mid);">1080P HD</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-project-details">
+      <h4 id="modalTitle" class="modal-project-title">Project Title</h4>
+      <p id="modalDesc" class="modal-project-description">Project Description details go here.</p>
+    </div>
+  </div>
+</div>
+
+<!-- POP-UP TOAST DE CÓPIA DE E-MAIL -->
+<div id="toastNotification" class="toast-notification">Email copied to clipboard!</div>
+
+<script>
+  // BANCO DE DADOS LOCALIZADO DOS SEUS PROJETOS REAIS PARA O LIGHTBOX
+  const projectDatabase = {
+    p1: {
+      title: "Areia no Asfalto",
+      image: "https://i.postimg.cc/0yYYhqgg/Areia-no-asfalto-frame-at-1m3s.jpg",
+      youtubeId: "AgUfscaXZUM",
+      en: {
+        title: "Sand on the Street",
+        role: "Creator / Screenwriter / Filmmaker",
+        year: "2026",
+        desc: "A short film exploring flânerie and urban observation: tracing the tension between beach and city along the coastline of Rio de Janeiro. A meditation on drifting through the familiar como se fosse a primeira vez."
+      },
+      pt: {
+        title: "Areia no Asfalto",
+        role: "Criador / Roteirista / Filmmaker",
+        year: "2026",
+        desc: "Um curta-metragem que explora a flânerie e a observação urbana: traçando a tensão entre a praia e a cidade ao longo da costa do Rio de Janeiro. Uma meditação sobre flanar pelo familiar como se fosse a primeira vez."
+      },
+      es: {
+        title: "Arena en el Asfalto",
+        role: "Creador / Guionista / Filmmaker",
+        year: "2026",
+        desc: "Un cortometraje que explora la flânerie y la observación urbana: trazando la tensión entre la playa y la ciudad a lo largo de la costa de Río de Janeiro. Una meditação sobre vagar por lo familiar como si fuera la primera vez."
+      },
+      fr: {
+        title: "Du Sable sur l'Asphalte",
+        role: "Créateur / Scénariste / Filmmaker",
+        year: "2026",
+        desc: "Un court-métrage explorant la flânerie et l'observation urbaine: retraçant la tension entre plage et ville le long du littoral de Rio de Janeiro. Une méditation sur la dérive à travers le familier como pour la première fois."
+      }
+    },
+    p2: {
+      title: "O Algoritmo Red Pill",
+      image: "https://images.unsplash.com/photo-1536440136628-849c177e76a1?q=80&w=1200&auto=format&fit=crop",
+      en: {
+        title: "The Red Pill Algorithm",
+        role: "Director / Screenwriter / Editor / Researcher",
+        year: "2026",
+        desc: "A 30-minute documentary dissecting the mechanics, cultural impact, and online subcultures of the digital Red Pill movement. Features interview editing, archival footage, and high-fidelity color grading."
+      },
+      pt: {
+        title: "O Algoritmo Red Pill",
+        role: "Diretor / Roteirista / Editor / Pesquisador",
+        year: "2026",
+        desc: "Um documentário de 30 minutos que disseca a mecânica, o impacto cultural e as subculturas online do movimento Red Pill digital. Apresenta edição de entrevistas, imagens de arquivo e gradação de cor refinada."
+      },
+      es: {
+        title: "El Algoritmo Red Pill",
+        role: "Director / Guionista / Editor / Investigador",
+        year: "2026",
+        desc: "Un documental de 30 minutos que analiza la mecánica, el impacto cultural y las subsubculturas en línea del movimiento Red Pill digital. Cuenta con edición de entrevistas, material de archivo y corrección de color de alta fidelidad."
+      },
+      fr: {
+        title: "L'Algorithme Red Pill",
+        role: "Réalisateur / Scénariste / Monteur / Chercheur",
+        year: "2026",
+        desc: "Un documentaire de 30 minutes disséquant les mécanismes, l'impact culturel et les sous-cultures en ligne du mouvement Red Pill digital. Comprend le montage d'interviews, des images d'archive et un étalonnage de haute fidélité."
+      }
+    },
+    p3: {
+      title: "la-roche-posay: videocast com Preta Gil e Mariana Xavier",
+      image: "https://i.postimg.cc/vH121rXZ/KIA-FINAL-00-06-02-16-Still007.jpg",
+      youtubeId: "i-a282pdbvw",
+      youtubeParams: "si=Ow4DIZvbzjMXBzwl", // Parâmetro de compartilhamento fornecido
+      en: {
+        title: "la-roche-posay: videocast com Preta Gil e Mariana Xavier",
+        role: "Video Editor / Post-Production",
+        year: "2024",
+        desc: "Special videocast episode featuring singer Preta Gil, her dermatologist, and actress Mariana Xavier discussing skin health. Focused on dynamic multi-camera switching, clean dialogue editing, and color balancing."
+      },
+      pt: {
+        title: "la-roche-posay: videocast com Preta Gil e Mariana Xavier",
+        role: "Editor / Pós-Produção",
+        year: "2024",
+        desc: "Episódio especial de videocast com a cantora Preta Gil, sua dermatologista e a atriz Mariana Xavier conversando sobre saúde da pele. Focado em cortes dinâmicos de multicâmera, edição limpa de diálogos e balanceamento de cores."
+      },
+      es: {
+        title: "la-roche-posay: videocast com Preta Gil e Mariana Xavier",
+        role: "Editor / Postproducción",
+        year: "2024",
+        desc: "Episodio especial de videocast con la cantante Preta Gil, su dermatóloga y la actriz Mariana Xavier conversando sobre la salud de la piel. Enfocado en cortes dinámicos de multicámaras, edición limpia de diálogos e balance de color."
+      },
+      fr: {
+        title: "la-roche-posay: videocast com Preta Gil e Mariana Xavier",
+        role: "Monteur / Post-Production",
+        year: "2024",
+        desc: "Épisode spécial de vidéocast avec la chanteuse Preta Gil, sa dermatologue et l'actrice Mariana Xavier discutant de la santé de la peau. Focus sur le montage multi-caméras dynamique, l'édition soignée des dialogues et l'équilibre des cores."
+      }
+    },
+    p4: {
+      title: "SP Open: Commercial Video",
+      image: "https://i.postimg.cc/T1tS5F2Z/Captura-de-tela-2026-05-23-041429.png",
+      youtubeId: "fgi9beHOh5E",
+      youtubeParams: "si=59KPMm9CNndnohhX",
+      en: {
+        role: "Video Editor / Screenwriter / Motion Graphics",
+        year: "2025",
+        desc: "Full promotional video package for the SP Open event. Motion graphics, branding elements, and production asset coordination: delivering a polished visual identity across all video formats."
+      },
+      pt: {
+        role: "Editor / Roteirista / Motion Graphics",
+        year: "2025",
+        desc: "Pacote promocional completo em vídeo para o evento SP Open. Motion graphics, elementos de branding e coordenação de ativos de produção: entregando uma identidade visual refinada em todos os formatos de vídeo."
+      },
+      es: {
+        role: "Editor / Guionista / Motion Graphics",
+        year: "2025",
+        desc: "Paquete promocional completo en video para el evento SP Open. Motion graphics, elementos de marca y coordinación de activos de producción: entregando una identidad visual refinada en todos os formatos de video."
+      },
+      fr: {
+        role: "Monteur / Scénariste / Motion Graphics",
+        year: "2025",
+        desc: "Package vidéo promotionnel complet pour l'événement SP Open. Motion graphics, elements de branding et coordination de production : offrant une identité visuelle raddisnée sur tous les formats de vidéo."
+      }
+    },
+    p5: {
+      title: "Águas do Rio: Complexo da Maré",
+      image: "https://i.postimg.cc/yxyhMNyQ/capa-mareeee.jpg",
+      vimeoId: "1132534309",
+      en: {
+        role: "Video Editor / Post-Production",
+        year: "2025",
+        desc: "Institutional video focused on the basic sanitation works implemented by Águas do Rio in Complexo da Maré, highlighting the social impact and infrastructure transformation within the community."
+      },
+      pt: {
+        role: "Editor / Pós-Produção",
+        year: "2025",
+        desc: "Vídeo institucional focado nas obras de saneamento básico promovidas pela Águas do Rio no Complexo da Maré, destacando o impacto social e a transformação na infraestrutura da comunidade."
+      },
+      es: {
+        role: "Editor / Postproducción",
+        year: "2025",
+        desc: "Video institucional centrado en las obras de saneamiento básico promovidas por Águas do Rio en el Complexo da Maré, destacando el impacto social y la transformación de la infraestructura comunitaria."
+      },
+      fr: {
+        role: "Monteur / Post-Production",
+        year: "2025",
+        desc: "Vidéo institutionnelle axée sur les travaux d'assainissement de base menés par Águas do Rio au Complexo da Maré, soulignant l'impact social et la transformation des infrastructures de la communauté."
+      }
+    },
+    p6: {
+      title: "Tanzânia: Aeroporto de Kilimanjaro",
+      image: "https://i.postimg.cc/mDDg373C/capa-kia.jpg",
+      vimeoId: "1172729652",
+      vimeoHash: "49eace3b63",
+      en: {
+        title: "Tanzania: Kilimanjaro Airport",
+        role: "Video Editor / Post-Production",
+        year: "2025",
+        desc: "Institutional promotional video capturing the expansion, modern infrastructure, and strategic significance of Kilimanjaro International Airport in Tanzania."
+      },
+      pt: {
+        title: "Tanzânia: Aeroporto de Kilimanjaro",
+        role: "Editor / Pós-Produção",
+        year: "2025",
+        desc: "Vídeo institucional promocional registrando a expansão, infraestrutura moderna e a importância estratégica do Aeroporto Internacional de Kilimanjaro na Tanzânia."
+      },
+      es: {
+        title: "Tanzania: Aeropuerto de Kilimanjaro",
+        role: "Editor / Postproducción",
+        year: "2025",
+        desc: "Video institucional promocional que captura la expansión, la infraestructura moderna y la relevancia estratégica del Aeropuerto Internacional del Kilimanjaro en Tanzania."
+      },
+      fr: {
+        title: "Tanzanie : Aéroport de Kilimandjaro",
+        role: "Monteur / Post-Production",
+        year: "2025",
+        desc: "Vidéo institutionnelle promotionnelle capturant l'expansion, l'infrastructure moderne et l'importance stratégique de l'aéroport international du Kilimanjaro en Tanzanie."
+      }
+    },
+    p7: {
+      title: "O Peso do Véu",
+      image: "https://i.postimg.cc/BnKDHfZW/capa-o-peso-do-veu.jpg",
+      vimeoId: "1195236126",
+      en: {
+        title: "The Weight of the Veil",
+        role: "Editor / Post-Production",
+        year: "2025",
+        desc: "An experimental cinematic essay exploring identity, cultural heritage, and personal freedom. A poetic visual journey with slow-tempo grading and dramatic lighting."
+      },
+      pt: {
+        title: "O Peso do Véu",
+        role: "Editor / Pós-Produção",
+        year: "2025",
+        desc: "Um ensaio cinematográfico experimental que explora identidade, herança cultural e liberdade pessoal. Uma jornada visual poética com gradação de tempo lento e iluminação dramática."
+      },
+      es: {
+        title: "El Peso del Velo",
+        role: "Editor / Postproducción",
+        year: "2025",
+        desc: "Un ensayo cinematográfico experimental que explora la identidad, la herencia cultural y la libertad personal. Un viaje visual poético con gradación de tempo lento e iluminación dramática."
+      },
+      fr: {
+        title: "Le Poids du Voile",
+        role: "Monteur / Post-Production",
+        year: "2025",
+        desc: "Un essai cinématographique expérimental explorant l'identité, l'héritage culturel et la liberté personnelle. Un voyage visuel poétique avec un étalonnage à tempo lent et un éclairage dramatique."
+      }
+    }
+  };
+
+  // Traduções do Toast de cópia de e-mail de acordo com a seleção de idioma
+  const toastTranslations = {
+    en: "Email copied to clipboard!",
+    pt: "E-mail copiado para a área de transferência!",
+    es: "¡Correo copiado al portapapeles!",
+    fr: "E-mail copié dans le presse-papiers!"
+  };
+
+  let activeLanguage = 'en';
+  let activeProjectId = null;
+
+  // Intersection Observer para animações de revelação suave ao rolar a tela
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 90);
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+  // Gerenciamento e troca de idiomas
+  function setLanguage(lang) {
+    activeLanguage = lang;
+    
+    // Remover o estado ativo de todos os botões de idioma
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+      btn.classList.remove('active');
+      if (btn.getAttribute('data-lang-target') === lang) {
+        btn.classList.add('active');
+      }
+    });
+
+    // Atualizar a classe do corpo do documento com segurança preservando o tema ativo
+    const isLight = document.body.classList.contains('light-theme');
+    document.body.className = '';
+    document.body.classList.add('lang-' + lang);
+    if (isLight) {
+      document.body.classList.add('light-theme');
+    }
+
+    // Se o modal estiver ativo, atualiza o texto instantaneamente
+    if (activeProjectId) {
+      updateModalTexts();
+    }
+
+    // Salvar a escolha no localStorage para persistência futura
+    try {
+      localStorage.setItem('portfolio-language', lang);
+    } catch (e) {
+      // Falha silenciosa para evitar erros de iframe de segurança
+    }
+  }
+
+  // GERENCIAMENTO DO TEMA SWITCHER DINÂMICO
+  function toggleTheme() {
+    const isLight = document.body.classList.toggle('light-theme');
+    try {
+      localStorage.setItem('portfolio-theme', isLight ? 'light' : 'dark');
+    } catch (e) {}
+  }
+
+  // FILTROS DE TRABALHOS (DINÂMICO)
+  function filterProjects(category) {
+    // Atualizar classe ativa nos botões de filtro
+    const buttons = document.querySelectorAll('.filter-btn');
+    buttons.forEach(btn => {
+      btn.classList.remove('active');
+    });
+    
+    // Marcar botão correspondente como ativo
+    if (event && event.currentTarget) {
+      event.currentTarget.classList.add('active');
+    }
+
+    const cards = document.querySelectorAll('.work-item');
+    cards.forEach(card => {
+      const cardCategory = card.getAttribute('data-category');
+      if (category === 'all' || (cardCategory && cardCategory.split(' ').includes(category))) {
+        card.style.display = 'flex';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  }
+
+  // CONTROLE DO HEADER FIXO (SCROLL TRIGGER)
+  window.addEventListener('scroll', () => {
+    const header = document.getElementById('header-fixed');
+    if (window.scrollY > window.innerHeight * 0.7) {
+      header.classList.add('scrolled');
+    } else {
+      header.classList.remove('scrolled');
+    }
+  });
+
+  // PLAYER INTERATIVO MODAL (LIGHTBOX)
+  function openVideoPlayer(projectId) {
+    activeProjectId = projectId;
+    const modal = document.getElementById('videoModal');
+    const playerArt = document.getElementById('playerArt');
+    const realVideoPlayer = document.getElementById('realVideoPlayer');
+    const simulatedVideoPlayer = document.getElementById('simulatedVideoPlayer');
+
+    const project = projectDatabase[projectId];
+    if (!project) return;
+
+    // Reseta views dos players
+    realVideoPlayer.style.display = 'none';
+    realVideoPlayer.innerHTML = '';
+    simulatedVideoPlayer.style.display = 'none';
+
+    // Se houver ID do YouTube cadastrado, renderiza o Player Real
+    if (project.youtubeId) {
+      realVideoPlayer.style.display = 'block';
+      const startParam = project.startTime ? `&start=${project.startTime}` : '';
+      const params = project.youtubeParams ? `&${project.youtubeParams}` : '';
+      realVideoPlayer.innerHTML = `<iframe width="100%" height="100%" src="https://www.youtube.com/embed/${project.youtubeId}?autoplay=1&rel=0${startParam}${params}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen style="border: none; width: 100%; height: 100%;"></iframe>`;
+    } else if (project.vimeoId) {
+      realVideoPlayer.style.display = 'block';
+      const hashParam = project.vimeoHash ? `&h=${project.vimeoHash}` : '';
+      realVideoPlayer.innerHTML = `<iframe src="https://player.vimeo.com/video/${project.vimeoId}?badge=0&autopause=0&autoplay=1&app_id=58479${hashParam}" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen style="border: none; width: 100%; height: 100%;" title="${project.title}"></iframe>`;
+    } else {
+      // Caso contrário, ativa o mockup simulado
+      simulatedVideoPlayer.style.display = 'flex';
+      playerArt.style.backgroundImage = `url('${project.image}')`;
+    }
+
+    updateModalTexts();
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden'; // impede scroll de fundo
+  }
+
+  function updateModalTexts() {
+    if (!activeProjectId) return;
+    const project = projectDatabase[activeProjectId];
+    const details = project[activeLanguage] || project['en'];
+
+    const modalTitle = document.getElementById('modalTitle');
+    const modalDesc = document.getElementById('modalDesc');
+
+    modalTitle.textContent = details.title || project.title;
+    
+    const roleLabel = activeLanguage === 'pt' ? 'Função' : (activeLanguage === 'es' ? 'Función' : (activeLanguage === 'fr' ? 'Rôle' : 'Role'));
+    const yearLabel = activeLanguage === 'pt' ? 'Ano' : (activeLanguage === 'es' ? 'Año' : (activeLanguage === 'fr' ? 'Année' : 'Year'));
+
+    modalDesc.innerHTML = `<strong>${roleLabel}:</strong> ${details.role} &nbsp;|&nbsp; <strong>${yearLabel}:</strong> ${details.year}<br><br>${details.desc}`;
+  }
+
+  function closeVideoPlayer() {
+    const modal = document.getElementById('videoModal');
+    modal.classList.remove('active');
+    document.body.style.overflow = 'auto'; // reativa scroll de fundo
+    activeProjectId = null;
+
+    // Desmonta o Iframe para pausar o áudio do vídeo imediatamente
+    const realVideoPlayer = document.getElementById('realVideoPlayer');
+    realVideoPlayer.innerHTML = '';
+    realVideoPlayer.style.display = 'none';
+  }
+
+  // Fechar modal clicando fora dele
+  window.addEventListener('click', (e) => {
+    const modal = document.getElementById('videoModal');
+    if (e.target === modal) {
+      closeVideoPlayer();
+    }
+  });
+
+  // Função robusta para copiar o e-mail e exibir o aviso cinemático multilíngue
+  let toastTimeout;
+  function copyEmail(event) {
+    if (event) event.preventDefault();
+    const email = "arthur.vieiraraynaud@gmail.com";
+    
+    // Cria elemento temporário de input para suportar restrições de iFrame com segurança
+    const tempInput = document.createElement("textarea");
+    tempInput.value = email;
+    tempInput.style.position = "absolute";
+    tempInput.style.left = "-9999px";
+    document.body.appendChild(tempInput);
+    tempInput.select();
+    
+    // Executa a cópia de texto nativa
+    document.execCommand("copy");
+    document.body.removeChild(tempInput);
+
+    // Altera o texto do Toast baseado na tradução e idioma ativo
+    const toast = document.getElementById("toastNotification");
+    const activeText = toastTranslations[activeLanguage] || toastTranslations['en'];
+    toast.textContent = activeText;
+
+    // Ativa o Pop-up com animação suave
+    toast.classList.add("active");
+
+    // Limpa timeouts anteriores se o usuário clicar consecutivamente
+    clearTimeout(toastTimeout);
+    
+    // Desativa o Toast após 3 segundos
+    toastTimeout = setTimeout(() => {
+      toast.classList.remove("active");
+    }, 3000);
+  }
+
+  // Inicializar o idioma e o tema preferidos após o carregamento completo do documento
+  document.addEventListener('DOMContentLoaded', () => {
+    // 1. Inicializar Idioma
+    let initialLang = 'pt';
+    setLanguage(initialLang);
+
+    // 2. Inicializar Tema
+    let initialTheme = 'dark';
+    try {
+      const savedTheme = localStorage.getItem('portfolio-theme');
+      if (savedTheme === 'light') {
+        initialTheme = 'light';
+      }
+    } catch (e) {}
+    
+    if (initialTheme === 'light') {
+      document.body.classList.add('light-theme');
+    } else {
+      document.body.classList.remove('light-theme');
+    }
+  });
+</script>
+</body>
+</html>
